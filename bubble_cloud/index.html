@@ -25,30 +25,14 @@
 <body>
 
   <div id="container" class="container">
-      <select id="text-select">
-        <option value="sherlock">Sherlock Holmes</option>
-        <option value="aesop">Aesop's Fables</option>
-        <option value="alice">Alice in Wonderland</option>
-        <option value="gulliver">Gulliver's Travels</option>
-      </select>
     <header>
-    <h1>Bubble Cloud</h1>
-    <h2>The most frequently used words in:</h2>
-      <h2 id="book-title"></h2>
+    <h1>Experiences</h1>
     </header>
     <div id="main" role="main">
       <div id="vis"></div>
-      <div id="status"></div>
-      <div id="controls">
-        <h3>Jitter</h3>
-        <form id="jitter" oninput="output.value = (jitter_input.value / 200).toFixed(3)" >
-          <input id="jitter_input" type="range" min="0" max="400" value="100" style="width:240px;">
-          <output name="output" for="input">0.5</output>
-        </form>
       </div>
     </div>
     <footer>
-    <p><a href="http://vallandingham.me/building_a_bubble_cloud.html">Blog Post</a> | <a href="https://github.com/vlandham/bubble_cloud">Source Code</a> | <a href="http://www.nytimes.com/interactive/2012/09/04/us/politics/democratic-convention-words.html">Original Inspiration</a></p>
     </footer>
   </div> <!--! end of #container -->
 
