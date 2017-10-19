@@ -1,23 +1,12 @@
 const $ = window.$;
 
 $(document).ready(function () {
-    $('.tabs .tab').click(function(){
-	if ($(this).hasClass('signin')) {
-            $('.tabs .tab').removeClass('active');
-            $(this).addClass('active');
-            $('.cont').hide();
-            $('.signin-cont').show();
-	}
-	if ($(this).hasClass('signup')) {
-            $('.tabs .tab').removeClass('active');
-            $(this).addClass('active');
-            $('.cont').hide();
-            $('.signup-cont').show();
-	}
+
+    $(".remove-icon").click(function(){
+	$(this).parent().fadeOut(300);
     });
-    $('.container .bg').mousemove(function(e){
-	var amountMovedX = (e.pageX * -1 / 30);
-	var amountMovedY = (e.pageY * -1 / 9);
-	$(this).css('background-position', amountMovedX + 'px ' + amountMovedY + 'px');
+
+    $("#positive-add").click(function(){
+	console.log("this");
     });
 });

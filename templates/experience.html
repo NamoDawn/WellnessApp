@@ -3,7 +3,9 @@
   <head>
     <SCRIPT src="https://code.jquery.com/jquery-3.2.1.min.js"></SCRIPT>
     <SCRIPT src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></SCRIPT>
+    <script src="/static/scripts/experience.js?{{ cache_id }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/experience.css')}}?{{ cache_id }}"></link>
+
     <!-- Boostrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -21,17 +23,29 @@
 
       <div class="content">
 	<div class="cont">
-	  <form action="#" method="post" enctype="multipart/form-data">
+	  <form action="/signup" method="post" enctype="multipart/form-data">
 	    <!-- POSITIVE -->
 	    <div style="display: flex; flex-direction: row;">
-	      <input type="text" name="positive" id="positive" class="inpt" placeholder="Positive">
-	      <input type="text" name="positive" id="positive" class="inptserver" placeholder="1-10">
+	      <input type="text" name="positivename" id="positive" class="inpt" placeholder="Positive">
+	      <input type="text" name="positivescale" id="positive" class="inptserver" placeholder="1-10">
+	      <span class="glyphicon glyphicon-ok-circle add-icon" id="positive-add"> </span>
 	    </div>
 	    <!-- NEGATIVE -->
             <div style="display: flex; flex-direction: row;">
-	      <input type="text" name="negative" id="password" class="inpt" placeholder="Negative">
-              <input type="text" name="positive" id="positive" class="inptserver" placeholder="1-10">
+	      <input type="text" name="negativename" id="password" class="inpt" placeholder="Negative">
+              <input type="text" name="negativescale" id="positive" class="inptserver" placeholder="1-10">
+              <span class="glyphicon glyphicon-ok-circle add-icon" id="negative-add"> </span>
 	    </div>
+
+	    <div class="experience-wrap">
+
+
+	      <div class="row justify-content-md-center" id="experienceAdded">
+		<div class="col-xs-3"><span class="glyphicon glyphicon-remove-circle remove-icon"></span>meditation(6)</div>
+	      </div>
+
+	    </div>
+
 	    <!-- STOW BUTTON-->
 	    <div class="submit-wrap">
 	      <input value="Stow" class="submit" type="submit">
