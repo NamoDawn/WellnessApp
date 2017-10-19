@@ -3,8 +3,11 @@
   <head>
     <SCRIPT src="https://code.jquery.com/jquery-3.2.1.min.js"></SCRIPT>
     <SCRIPT src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></SCRIPT>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/login.css')}}?{{ cache_id }}"></link>
-    <script src="/static/scripts/login.js?{{ cache_id }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/experience.css')}}?{{ cache_id }}"></link>
+    <!-- Boostrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
   </head>
 
 
@@ -12,44 +15,34 @@
   <section class="container">
     <article class="half">
       <h1>Experience</h1>
-      <div class="tabs">
-	<span class="tab signin active"><a href="#signin">Sign in</a></span>
-	<span class="tab signup"><a href="#signup">Sign up</a></span>
+
+      <div class="divider">
       </div>
 
       <div class="content">
-	<div class="signin-cont cont">
+	<div class="cont">
 	  <form action="#" method="post" enctype="multipart/form-data">
-	    <input type="email" name="email" id="email" class="inpt" required="required" placeholder="Your email">
-	    <label for="email">Your email</label>
-	    <input type="password" name="password" id="password" class="inpt" required="required" placeholder="Your password">
-	    <label for="password">Your password</label>
-	    <input type="checkbox" id="remember" class="checkbox" checked>
-	    <label for="remember">Remember me</label>
-	    <div class="submit-wrap">
-	    <input type="submit" value="Sign in" class="submit">
-	    <a href="#" class="more">Forgot your password?</a>
+	    <!-- POSITIVE -->
+	    <div style="display: flex; flex-direction: row;">
+	      <input type="text" name="positive" id="positive" class="inpt" placeholder="Positive">
+	      <input type="text" name="positive" id="positive" class="inptserver" placeholder="1-10">
 	    </div>
+	    <!-- NEGATIVE -->
+            <div style="display: flex; flex-direction: row;">
+	      <input type="text" name="negative" id="password" class="inpt" placeholder="Negative">
+              <input type="text" name="positive" id="positive" class="inptserver" placeholder="1-10">
+	    </div>
+	    <!-- STOW BUTTON-->
+	    <div class="submit-wrap">
+	      <input value="Stow" class="submit" type="submit">
+	    </div>
+
+
 	  </form>
 	</div>
 
-      <div class="signup-cont cont">
-        <form action="#" method="post" enctype="multipart/form-data">
-	  <input type="name" name="name" id="name" class="inpt" required="required" placeholder="Your name">
-	  <label for="name">Your name</label>
-          <input type="email" name="email" id="email" class="inpt" required="required" placeholder="Your email">
-	  <label for="email">Your email</label>
-	  <input type="password" name="password" id="password" class="inpt" required="required" placeholder="Your password">
-	  <label for="password">Your password</label>
-	  <div class="submit-wrap">
-	    <input type="submit" value="Sign up" class="submit">
-	    <a href="#" class="more">Terms and conditions</a>
-	   </div>
-	 </form>
-        </div>
       </div>
     </article>
-    <div class="half bg"></div>
   </section>
 
 
