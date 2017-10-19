@@ -1,5 +1,5 @@
-name,count
-alice,147
+name,count, pos
+alice,147, neg
 little,44
 queen,28
 rabbit,28
