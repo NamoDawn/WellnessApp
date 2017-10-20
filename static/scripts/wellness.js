@@ -43,6 +43,7 @@ $('.tabs .tab').click(function(){
 		creds = [{'email':email, 'password':password}];
 		$.ajax({
 			url: 'http://localhost:5001/signin',
+//			url: 'http://54.193.75.123:5001/signin',
 			type: 'POST',
 			dataType: 'json',
 			contentType: 'application/json',
