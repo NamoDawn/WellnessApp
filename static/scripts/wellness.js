@@ -1,4 +1,3 @@
-
 window.onload = function () {
     console.log('Window loaded!');
 
@@ -15,8 +14,8 @@ window.onload = function () {
     $('#signin_button').on('click', function () {
 		const email = $('#si_email').val()
 		const password = $('#si_password').val()
-//		signin(email, password, f_name, l_name);
-		signin('108@holbertonschool.com', 'test_pw'); // <--- use hardcode for testing
+		signin(email, password);
+//		signin('108@holbertonschool.com', 'test_pw'); // <--- use hardcode for testing
     });
 
 $('.tabs .tab').click(function(){
