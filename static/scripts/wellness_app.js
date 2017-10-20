@@ -21,10 +21,10 @@ window.onload = function () {
 	        data: json.dumps(creds),
 	        success: function (res) {
 		    console.log(res);
-		        },
+		 },
 	        error: function (res) {
 		    console.log('ERROR!');
-		        }
+		}
 	    });
     }
 }

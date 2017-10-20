@@ -11,7 +11,15 @@ cors = CORS(app, resources={r"/*": {"origins": "*"}})
 @app.route('/temp', strict_slashes=False)
 def mainpage():
     return render_template('login.html',
-                           cache_id=uuid.uuid4())
+                           cache_id=uuid.uuid4()
+    )
+"""
+@application.route("/signup", methods=['GET', 'POST'])
+def signup():
+    posname=request.form['positivename']
+    print(posname);
+    return render_template('experience.html')
+"""
 
 @app.route('/', strict_slashes=False)
 @app.route('/serve/', strict_slashes=False)
