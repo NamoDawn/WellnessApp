@@ -3,7 +3,8 @@
   <head>
     <SCRIPT src="https://code.jquery.com/jquery-3.2.1.min.js"></SCRIPT>
     <SCRIPT src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></SCRIPT>
-    <script src="/static/scripts/experience.js?{{ cache_id }}"></script>
+    <SCRIPT src="/static/scripts/experience.js?{{ cache_id }}"></SCRIPT>
+<!--    <SCRIPT src="/static/scripts/add.js?{{ cache_id }}"></SCRIPT> -->
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/experience.css')}}?{{ cache_id }}"></link>
 
     <!-- Boostrap -->
@@ -11,8 +12,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
   </head>
-
-
 
   <section class="container">
     <article class="half">
@@ -27,7 +26,7 @@
 	    <!-- POSITIVE -->
 	    <div style="display: flex; flex-direction: row;">
 	      <input type="text" name="positivename" id="positive" class="inpt" placeholder="Positive">
-	      <input type="text" name="positivescale" id="positive" class="inptserver" placeholder="1-10">
+	      <input type="text" name="positivescale" id="positivescale" class="inptserver" placeholder="1-10">
 	      <span class="glyphicon glyphicon-ok-circle add-icon" id="positive-add"> </span>
 	    </div>
 	    <!-- NEGATIVE -->
@@ -41,7 +40,7 @@
 
 
 	      <div class="row justify-content-md-center" id="experienceAdded">
-		<div class="col-xs-3"><span class="glyphicon glyphicon-remove-circle remove-icon"></span>meditation(6)</div>
+		
 	      </div>
 
 	    </div>
