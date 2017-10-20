@@ -44,8 +44,6 @@ def signin():
     """ Authorizes a user to enter their member page  """
     email = json.loads(request.data.decode('utf-8'))[0]['email']
     password = json.loads(request.data.decode('utf-8'))[0]['password']
-    input('email: {}'.format(email))
-#    obj = json.loads(response)
     if user_exists(email, password):
         return jsonify(True)
     return jsonify(False)
