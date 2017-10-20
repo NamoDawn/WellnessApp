@@ -38,7 +38,24 @@ $('.tabs .tab').click(function(){
 		$(this).css('background-position', amountMovedX + 'px ' + amountMovedY + 'px');
     });
 
+	function load_experience_page() {
+		/* call endpoint for rendering experience.html */
 
+		$.ajax({
+			url: 'http://localhost:5001/experience',
+//			url: 'http://54.193.75.123:5001/experience'
+			type: 'GET',
+			contentType: 'text',
+			success: function (res) {
+				$( location ).attr("href", 'http://localhost:5001/experience');
+				console.log()
+			},
+			error: function (res) {
+				console.log('Failed to call endpoint "experience"')
+			}
+		});
+	}
+	
 	function signin(email, password) {
 		creds = [{'email':email, 'password':password}];
 		$.ajax({
@@ -51,10 +68,11 @@ $('.tabs .tab').click(function(){
 			success: function (res) {
 				if (res == true) {
 					console.log('Logged In!')
-					// LISA: redirect to member page
+					$( location ).attr("href", 'http://localhost:5001/experience');
 				} else {
 					console.log('Login failed')
-					// LISA: 'You have entered an invalid email/password combination. Please try again or click "Sign Up" to create a new account'
+					return false;
+					// TODO: add div for 'You have entered an invalid email/password combination. Please try again or click "Sign Up" to create a new account'
 				}
 			},
 			error: function (res) {

@@ -8,26 +8,12 @@ import uuid
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
-@app.route('/temp', strict_slashes=False)
+@app.route('/', strict_slashes=False)
 def mainpage():
+    # TODO: create a landing page. indecx.html should be landing, not login.html
     return render_template('login.html',
                            cache_id=uuid.uuid4()
     )
-"""
-@application.route("/signup", methods=['GET', 'POST'])
-def signup():
-    posname=request.form['positivename']
-    print(posname);
-    return render_template('experience.html')
-"""
-
-@app.route('/', strict_slashes=False)
-@app.route('/serve/', strict_slashes=False)
-def serve():
-    """ renders index.html template """
-    results = []
-    return render_template('login.html',
-                           results=results)
 
 @app.route('/signup/', methods=['GET', 'OPTIONS', 'POST'], strict_slashes=False)
 def signup():
@@ -35,17 +21,27 @@ def signup():
     response = request.data.decode('utf-8')
     print('response: {}'.format(response))
     obj = json.loads(response)
-
-    con = pymysql.connect('localhost', 'wellness_dev', 'wellness_dev_pwd', 'wellness_dev_db')
-    cursor = con.cursor()
     email = obj[0]['email']
     password = obj[0]['password']
+    if user_exists(email):
+        print('This email is already registered')
+        return jsonify(True)
+    con = pymysql.connect('localhost', 'wellness_dev', 'wellness_dev_pwd', 'wellness_dev_db')
+    cursor = con.cursor()
+
     cursor.execute("INSERT INTO credentials (email, password, f_name, l_name) VALUES('{}', '{}', '{}', '{}')".format(email, password, obj[0]['f_name'], obj[0]['l_name']))
     con.commit()
     con.close()
     if user_exists(email):
+        print('succesfully created user account for {}'.format(email))
         return jsonify(True)
+    print('user creation failed!')
     return jsonify(False)
+
+@app.route('/experience/', strict_slashes=False)
+def experience():
+    """ renders experience.html  """
+    return render_template('experience.html')
 
 @app.route('/signin/', methods=['POST'], strict_slashes=False)
 def signin():

@@ -9,19 +9,6 @@ from datetime import datetime
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
-@app.route('/', strict_slashes=False)
-def mainpage():
-    return render_template('login.html',
-                           cache_id=uuid.uuid4())
-
-#@app.route('/serve/', strict_slashes=False)
-#def serve():
-#    """ renders index.html template """
-#    results = []
-#    return render_template('index.html',
-#                           results=results)
-
-
 @app.route('/sign_up/', methods=['GET', 'OPTIONS', 'POST'], strict_slashes=False)
 def sign_up():
     """ inserts new user credentials into 'credentials' table """
