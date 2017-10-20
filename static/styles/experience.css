@@ -314,3 +314,8 @@ body .container .content .signup-cont {
 .remove-icon:active {
      text-shadow: 1px 1px grey;
 }
+
+
+.symdisplay {
+    margin-left: 5px;
+}
