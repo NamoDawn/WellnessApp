@@ -33,10 +33,10 @@ def serve():
 def signup():
     """ inserts new user credentials into 'credentials' table """
     response = request.data.decode('utf-8')
-    input('response: {}'.format(response))
+    print('response: {}'.format(response))
     obj = json.loads(response)
 
-    con = pymysql.connect('localhost', 'root', 'adminroot', 'wellness_dev_db')
+    con = pymysql.connect('localhost', 'wellness_dev', 'wellness_dev_pwd', 'wellness_dev_db')
     cursor = con.cursor()
     email = obj[0]['email']
     password = obj[0]['password']
@@ -47,9 +47,18 @@ def signup():
         return jsonify(True)
     return jsonify(False)
 
+@app.route('/signin/', methods=['POST'], strict_slashes=False)
+def signin():
+    """ Authorizes a user to enter their member page  """
+    email = json.loads(request.data.decode('utf-8'))[0]['email']
+    password = json.loads(request.data.decode('utf-8'))[0]['password']
+    if user_exists(email, password):
+        return jsonify(True)
+    return jsonify(False)
+
 def user_exists(email, password=None):
     """ confirms existance of email in 'credentials table', w. option to validate email  """
-    con = pymysql.connect('localhost', 'root', 'adminroot', 'wellness_dev_db')
+    con = pymysql.connect('localhost', 'wellness_dev', 'wellness_dev_pwd', 'wellness_dev_db')
     cursor = con.cursor()
     results = ()
     if password:
