@@ -1,63 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <SCRIPT src="https://code.jquery.com/jquery-3.2.1.min.js"></SCRIPT>
-    <SCRIPT src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></SCRIPT>
-    <SCRIPT src="/static/scripts/experience.js?{{ cache_id }}"></SCRIPT>
-<!--    <SCRIPT src="/static/scripts/add.js?{{ cache_id }}"></SCRIPT> -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+	<script src="{{ url_for('static', filename='scripts/experience.js')  }}?{{cache_id}}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/experience.css')}}?{{ cache_id }}"></link>
+	<link rel="shortcut icon" href="#" />
 
     <!-- Boostrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
   </head>
+  <body>
+	<button id="test_button">test</button>
+	<section class="container">
+      <article class="half">
+		<h1>Experience</h1>
 
-  <section class="container">
-    <article class="half">
-      <h1>Experience</h1>
+		<div class="divider">
+		</div>
 
-      <div class="divider">
-      </div>
+		<div class="content">
+		  <div class="cont">
+			<form action="/addexperience" method="post" enctype="multipart/form-data">
+			  
+			  <!-- POSITIVE -->
+			  <div style="display: flex; flex-direction: row;">
+				<input type="text" name="positivename" id="positive" class="inpt" placeholder="Positive">
+				<input type="text" name="positive_scale" id="positive_scale" class="inptserver" placeholder="1-10">
+				<span class="glyphicon glyphicon-ok-circle add-icon" id="positive-add"> </span>
+			  </div>
 
-      <div class="content">
-	<div class="cont">
-	  <form action="/addexperience" method="post" enctype="multipart/form-data">
-	    <!-- POSITIVE -->
-	    <div style="display: flex; flex-direction: row;">
-	      <input type="text" name="positivename" id="positive" class="inpt" placeholder="Positive">
-	      <input type="text" name="positivescale" id="positivescale" class="inptserver" placeholder="1-10">
-	      <span class="glyphicon glyphicon-ok-circle add-icon" id="positive-add"> </span>
-	    </div>
-	    <!-- NEGATIVE -->
-            <div style="display: flex; flex-direction: row;">
-	      <input type="text" name="negativename" id="negative" class="inpt" placeholder="Negative">
-              <input type="text" name="negativescale" id="negativescale" class="inptserver" placeholder="1-10">
-              <span class="glyphicon glyphicon-ok-circle add-icon" id="negative-add"> </span>
-	    </div>
+			  <!-- NEGATIVE -->
+              <div style="display: flex; flex-direction: row;">
+				<input type="text" name="negativename" id="negative" class="inpt" placeholder="Negative">
+				<input type="text" name="negativescale" id="negativescale" class="inptserver" placeholder="1-10">
+				<span class="glyphicon glyphicon-ok-circle add-icon" id="negative-add"> </span>
+			  </div>
+			  <div class="experience-wrap">
+				<div class="row justify-content-md-center" id="experienceAdded">
+				</div>
+			  </div>
 
-	    <div class="experience-wrap">
-
-
-	      <div class="row justify-content-md-center" id="experienceAdded">
-
-	      </div>
-
-	    </div>
-
-	    <!-- STOW BUTTON-->
-	    <div class="submit-wrap">
-	      <input value="Stow" class="submit" type="submit">
-	    </div>
-
-
-	  </form>
-	</div>
-
-      </div>
-    </article>
-  </section>
-
-
-
+			  <!-- STOW BUTTON-->
+			  <div class="submit-wrap">
+				<input value="Stow" class="submit" type="submit">
+			  </div>
+			</form>
+		  </div>
+		</div>
+      </article>
+	</section>
+  </body>
 </html>
