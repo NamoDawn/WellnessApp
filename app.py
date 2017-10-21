@@ -25,12 +25,13 @@ def save_exp():
 
     con = pymysql.connect('localhost', 'wellness_dev', 'wellness_dev_pwd', 'wellness_dev_db')
     cursor = con.cursor()
-    symp_name = obj[0]['symp_name']
-    scale = obj[0]['scale']
+#    input('obj {}'.format(obj))
+    symp_name = obj['symp_name']
+    scale = obj['scale']
     if scale == '':
         scale = 5
     date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    _type = obj[0]['type']
+    _type = obj['type']
     user_id = 1 #<--- this needs to be dynamic
     count = 0
 

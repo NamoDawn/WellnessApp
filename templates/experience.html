@@ -13,7 +13,6 @@
 
   </head>
   <body>
-	<button id="test_button">test</button>
 	<section class="container">
       <article class="half">
 		<h1>Experience</h1>
@@ -23,19 +22,19 @@
 
 		<div class="content">
 		  <div class="cont">
-			<form action="/addexperience" method="post" enctype="multipart/form-data">
+<!--			<form action="/addexperience" method="post" enctype="multipart/form-data"> -->
 			  
 			  <!-- POSITIVE -->
 			  <div style="display: flex; flex-direction: row;">
-				<input type="text" name="positivename" id="positive" class="inpt" placeholder="Positive">
+				<input type="text" name="positive_name" id="positive" class="inpt" placeholder="Positive">
 				<input type="text" name="positive_scale" id="positive_scale" class="inptserver" placeholder="1-10">
 				<span class="glyphicon glyphicon-ok-circle add-icon" id="positive-add"> </span>
 			  </div>
 
 			  <!-- NEGATIVE -->
               <div style="display: flex; flex-direction: row;">
-				<input type="text" name="negativename" id="negative" class="inpt" placeholder="Negative">
-				<input type="text" name="negativescale" id="negativescale" class="inptserver" placeholder="1-10">
+				<input type="text" name="negative_name" id="negative" class="inpt" placeholder="Negative">
+				<input type="text" name="negative_scale" id="negative_scale" class="inptserver" placeholder="1-10">
 				<span class="glyphicon glyphicon-ok-circle add-icon" id="negative-add"> </span>
 			  </div>
 			  <div class="experience-wrap">
@@ -45,9 +44,9 @@
 
 			  <!-- STOW BUTTON-->
 			  <div class="submit-wrap">
-				<input value="Stow" class="submit" type="submit">
+				<input value="Stow" class="submit" id="stow_button" type="submit">
 			  </div>
-			</form>
+<!--			</form> -->
 		  </div>
 		</div>
       </article>

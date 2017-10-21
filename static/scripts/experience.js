@@ -1,80 +1,39 @@
 const $ = window.$;
 
+let stagedExp = [];
+let stagedObj = [];
+
 $(document).ready(function(){
     /* Add positive button clicked
      * Positive Experience Button Clicked adds to build expObj*/
     $("#positive-add").on('click', function () {
-		const symp_name = $('#positive').val();
-		const scale = $('#positive_scale').val();
-//		const date = new Date().toLocaleString();
-		const type = 'positive';
-		const obj = [{'symp_name': symp_name,
-					'scale':scale,
-					'type': type}]
+		const name = $('#positive').val()
+		let scale = $('#positive_scale').val()
 
-		$.ajax({
-			url: 'http://localhost:5001/save_exp',
-			type: 'POST',
-			dataType: 'json',
-			contentType: 'application/json',
-			data: JSON.stringify(obj),
-			success: function (res) {
-				console.log(res)
-			},
-			error: function (res) {
-				console.error('Error: ' + res);
-			}
-		});
-
+		queueExp(name, scale, 'positive');
+		$('#positive').val('');
+		$('#positive_scale').val('');
 	});
 
-/*    $("#positive-add").click(function(){
-		let posVal = $('#positive').val();
-		let posScale = $('#positivescale').val();
+	$('#stow_button').on('click', function () {
+		save_experiences(stagedObj);
+		$("#experienceAdded").empty();
+		stagedExp = []
+		stagedObj = []
+	});
 
-		if (posScale == "") {
-			posScale = 5;
-		}
-		/*checks if the experience was already added in the current session already*/
-/*		if (!expName.includes(posVal) && posVal != "") {
-			/*Dynamically building the DOM*/
-    /*        let experienceAdded = $('#experienceAdded');
-            let grid = $('<div/>', {class: 'col-xs-3'}).appendTo(experienceAdded);
-            let icon = $('<span/>', {class: 'glyphicon glyphicon-remove-circle remove-icon'}).appendTo(grid);
-            let text = $('<span/>', {class: 'symdisplay', id:posVal+posScale, name: posVal, text:posVal + '(' + posScale + ')'}).appendTo(icon);
-			/*adding the experience to expObj*/
-	/*		expName.push(posVal);
-            $('#positive').val('');
-			$('#positivescale').val('');
-			newPos = {'name': posVal,'scale': posScale, 'type': 'pos'};
-			expObj.push(newPos);;
-		}
-    }); */
     /* Add negative button clicked
      * Negative Experience Button Clicked adds to build expObj*/
     $("#negative-add").click(function(){
-        let negVal = $('#negative').val();
-        let negScale = $('#negativescale').val();
+        let name = $('#negative').val();
+        let scale = $('#negative_scale').val();
 
-        if (negScale == "") {
-            negScale = 5;
-        }
-	/*checks if the experience was already added in the current session already*/
-        if (!expName.includes(negVal) && negVal != "") {
-	    /*Dynamically building the DOM*/
-            let experienceAdded = $('#experienceAdded');
-            let grid = $('<div/>', {class: 'col-xs-3'}).appendTo(experienceAdded);
-            let icon = $('<span/>', {class: 'glyphicon glyphicon-remove-circle remove-icon'}).appendTo(grid);
-            let text = $('<span/>', {class: 'symdisplay', id:negVal + negScale, name: negVal, text:negVal + '(' + negScale + ')'}).appendTo(icon);
-	    /*adding the experience to expObj*/
-            expName.push(negVal);
-            $('#negative').val('');
-            $('#negativescale').val('');
-            expObj[negVal] = {'scale': negScale, 'type': 'neg'};
-        }
+		queueExp(name, scale, 'negative')
+		$('#negative').val('');
+		$('#negative_scale').val('');
     });
 
-    /* Remove icon clicked
+    /* 'Remove' icon clicked
      * Deletes expObj that was clicked*/
     $('body').on('click', '.remove-icon', function() {
 	/*Delete the element*/
@@ -89,3 +48,37 @@ $(document).ready(function(){
 	}
     });
 });
+
+function queueExp(name, scale, type) {
+	if (scale == '') {
+		scale = 5;
+	}
+	/*checks if the experience was already added in the current session already*/
+	if (!stagedExp.includes(name) && name != "") {
+        const experienceadded = $('#experienceAdded');
+        let grid = $('<div/>', {class: 'col-xs-3'}).appendTo(experienceadded);
+        const icon = $('<span/>', {class: 'glyphicon glyphicon-remove-circle remove-icon'}).appendTo(grid);
+        const text = $('<span/>', {class: 'symdisplay', id:name+scale, name: name, text:name + '(' + scale + ')'}).appendTo(icon);
+		stagedExp.push(name);
+		stagedObj.push({'symp_name': name, 'scale':scale, 'type': type})
+	}
+}
+
+function save_experiences(stagedObj) {
+	for (let i = 0; i < stagedObj.length; i++) {
+		const obj = stagedObj[i]
+		$.ajax({
+			url: 'http://localhost:5001/save_exp',
+			type: 'POST',
+			dataType: 'json',
+			contentType: 'application/json',
+			data: JSON.stringify(obj),
+			success: function (res) {
+				console.log(res)
+			},
+			error: function (res) {
+				console.error('Error: ' + res);
+			}
+		});
+	}
+}
