@@ -95,19 +95,19 @@ $(document).ready(function () {
      * endpoint: http://localhost:5001/signup
      * http method: POST*/
     function signup(email, password, f_name, l_name) {
-	const creds = [{'email': email, 'password': password, 'f_name': f_name, 'l_name': l_name}];
-	$.ajax ({
-	    url: 'http://localhost:5001/signup',
-	    type: 'POST',
-	    dataType: 'json',
-	    contentType: 'application/json',
-	    data: JSON.stringify(creds),
-	    success: function (res) {
-		console.log(res);
-	    },
-	    error: function (res) {
-		console.error('error with signup:' + res);
-	    }
-	});
+		const creds = [{'email': email, 'password': password, 'f_name': f_name, 'l_name': l_name}];
+		$.ajax ({
+			url: 'http://localhost:5001/signup',
+			type: 'POST',
+			dataType: 'json',
+			contentType: 'application/json',
+			data: JSON.stringify(creds),
+			success: function (res) {
+				console.log(res);
+			},
+			error: function (res) {
+				console.error('error with signup:' + res);
+			}
+		});
     }
 });
