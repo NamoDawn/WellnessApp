@@ -1,24 +1,26 @@
-window.onload = function () {
-    console.log('Window loaded!');
+const $ = window.$;
 
+$(document).ready(function () {
+    /* JQuery Section
+     * Sign up button clicked will retrieve the input fields and call function signup*/
     $('#signup_button').on('click', function () {
 		const email = $('#email').val()
 		const password = $('#password').val()
 		const f_name = $('#f_name').val()
 		const l_name = $('#l_name').val()
 		signup(email, password, f_name, l_name);
-//		signup('108@holbertonschool.com', 'test_pw', 'stuey', 'gk'); // <--- use hardcode for testing
     });
 
 
+    /*Sign in button clicked will retrieve the input fields and call function signin*/
     $('#signin_button').on('click', function () {
 		const email = $('#si_email').val()
 		const password = $('#si_password').val()
 		signin(email, password);
-//		signin('108@holbertonschool.com', 'test_pw'); // <--- use hardcode for testing
     });
 
-$('.tabs .tab').click(function(){
+    /*Tabs Toggle functionality*/
+    $('.tabs .tab').click(function(){
 	if ($(this).hasClass('signin')) {
             $('.tabs .tab').removeClass('active');
             $(this).addClass('active');
@@ -32,70 +34,80 @@ $('.tabs .tab').click(function(){
             $('.signup-cont').show();
 		}
     });
+    /*Behavior for background image moving*/
     $('.container .bg').mousemove(function(e){
 		var amountMovedX = (e.pageX * -1 / 30);
 		var amountMovedY = (e.pageY * -1 / 9);
 		$(this).css('background-position', amountMovedX + 'px ' + amountMovedY + 'px');
     });
-
-	function load_experience_page() {
-		/* call endpoint for rendering experience.html */
-
-		$.ajax({
-			url: 'http://localhost:5001/experience',
-//			url: 'http://54.193.75.123:5001/experience'
-			type: 'GET',
-			contentType: 'text',
-			success: function (res) {
-				$( location ).attr("href", 'http://localhost:5001/experience');
-				console.log()
-			},
-			error: function (res) {
-				console.log('Failed to call endpoint "experience"')
-			}
-		});
-	}
-	
-	function signin(email, password) {
-		creds = [{'email':email, 'password':password}];
-		$.ajax({
-			url: 'http://localhost:5001/signin',
-//			url: 'http://54.193.75.123:5001/signin',
-			type: 'POST',
-			dataType: 'json',
-			contentType: 'application/json',
-			data: JSON.stringify(creds),
-			success: function (res) {
-				if (res == true) {
-					console.log('Logged In!')
-					$( location ).attr("href", 'http://localhost:5001/experience');
-				} else {
-					console.log('Login failed')
-					return false;
-					// TODO: add div for 'You have entered an invalid email/password combination. Please try again or click "Sign Up" to create a new account'
-				}
-			},
-			error: function (res) {
-				console.log('ERROR!!');
-			}
-		});
-
-	}
-    function signup(email, password, f_name, l_name) {
-		const creds = [{'email': email, 'password': password, 'f_name': f_name, 'l_name': l_name}];
-		$.ajax ({
-			url: 'http://localhost:5001/signup',
-//			url: 'http://54.193.75.123:5001/signup',
-			type: 'POST',
-			dataType: 'json',
-			contentType: 'application/json',
-			data: JSON.stringify(creds),
-			success: function (res) {
-				console.log(res);
-			},
-			error: function (res) {
-				console.log('ERROR!');
-			}
-		});
+    /* Load experience page with ajax
+     * endpoint: http://localhost:5001/experience
+     * http method: GET
+     * onSuccess: redirects user to /experience*/
+    function load_experience_page() {
+	$.ajax({
+	    url: 'http://localhost:5001/experience',
+	    type: 'GET',
+	    contentType: 'text',
+	    success: function (res) {
+		$( location ).attr("href", 'http://localhost:5001/experience');
+		console.log()
+	    },
+	    error: function (res) {
+		console.log('Failed to call endpoint "experience"')
+	    }
+	});
     }
-}
+    /* Sign User in
+     * method: signin
+     * parameter(s): email, password
+     * additional info:
+     * endpoint: http://localhost:5001/signin
+     * http method: POST
+     * onSuccess: redirects user to /experience*/
+    function signin(email, password) {
+	creds = [{'email':email, 'password':password}];
+	$.ajax({
+	    url: 'http://localhost:5001/signin',
+	    type: 'POST',
+	    dataType: 'json',
+	    contentType: 'application/json',
+	    data: JSON.stringify(creds),
+	    success: function (res) {
+		if (res == true) {
+		    console.log('Logged In!')
+		    $( location ).attr("href", 'http://localhost:5001/experience');
+		} else {
+		    console.log('Login failed')
+		    return false;
+		}
+	    },
+	    error: function (res) {
+		console.log('error with signin:' + res);
+	    }
+	});
+    }
+
+    /* Sign User up
+     * method: signup
+     * parameter(s): email, password, f_name, l_name
+     * additional info:
+     * endpoint: http://localhost:5001/signup
+     * http method: POST*/
+    function signup(email, password, f_name, l_name) {
+	const creds = [{'email': email, 'password': password, 'f_name': f_name, 'l_name': l_name}];
+	$.ajax ({
+	    url: 'http://localhost:5001/signup',
+	    type: 'POST',
+	    dataType: 'json',
+	    contentType: 'application/json',
+	    data: JSON.stringify(creds),
+	    success: function (res) {
+		console.log(res);
+	    },
+	    error: function (res) {
+		console.error('error with signup:' + res);
+	    }
+	});
+    }
+});

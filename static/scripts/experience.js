@@ -4,7 +4,8 @@ $(document).ready(function(){
     let expName = [];
     let expObj = [];
 
-    /*Positive Experience Button Clicked adds to build expObj*/
+    /* Add positive button clicked
+     * Positive Experience Button Clicked adds to build expObj*/
     $("#positive-add").click(function(){
 	let posVal = $('#positive').val();
 	let posScale = $('#positivescale').val();
@@ -28,8 +29,8 @@ $(document).ready(function(){
 	    expObj.push(newPos);
 	}
     });
-
-    /*Negative Experience Button Clicked adds to build expObj*/
+    /* Add negative button clicked
+     * Negative Experience Button Clicked adds to build expObj*/
     $("#negative-add").click(function(){
         let negVal = $('#negative').val();
         let negScale = $('#negativescale').val();
@@ -52,7 +53,8 @@ $(document).ready(function(){
         }
     });
 
-    /*Deletes expObj that was clicked*/
+    /* Remove icon clicked
+     * Deletes expObj that was clicked*/
     $('body').on('click', '.remove-icon', function() {
 	/*Delete the element*/
 	$(this).parent().fadeOut(300);
