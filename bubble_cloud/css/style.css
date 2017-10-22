@@ -3,10 +3,11 @@ body {
 }
 
 a, a:visited {
-  color:green;
+  color:white;
 }
+
 a#neg.bubble-node {
-  fill: #d8afac;
+  fill: #f8f8f8;
 }
 
 a#neg.bubble-hover {
@@ -61,7 +62,7 @@ header {
 }
 
 .bubble-node {
-  fill: #d0f0c0;
+  fill: #d2e3ed;
 }
 
 .bubble-hover {
