@@ -7,7 +7,7 @@ $(document).ready(function () {
 	userId = JSON.parse(atob(localStorage.getItem('data')))['user_id'];
 	//localStorage.removeItem('data');
     /* Add positive button clicked
-     * Positive Experience Button Clicked adds to build expObj*/
+     * Positive Experience Button Clicked adds to build stagedObj*/
     $("#positive-add").on('click', function () {
 		const name = $('#positive').val()
 		let scale = $('#positive_scale').val()
@@ -25,7 +25,7 @@ $(document).ready(function () {
 	});
 
     /* Add negative button clicked
-     * Negative Experience Button Clicked adds to build expObj*/
+     * Negative Experience Button Clicked adds to build stagedObj*/
     $("#negative-add").click(function(){
         let name = $('#negative').val();
         let scale = $('#negative_scale').val();;
@@ -35,16 +35,17 @@ $(document).ready(function () {
     });
 
     /* 'Remove' icon clicked
-     * Deletes expObj that was clicked*/
+     * Deletes stagedObj that was clicked*/
     $('body').on('click', '.remove-icon', function() {
 	/*Delete the element*/
 	$(this).parent().fadeOut(300);
-	let index = expName.indexOf($(this).children().attr("name"));
-	expName.splice(index, 1);
-	/*update the expObj*/
-	for (let i = 0; i < expObj.length; i++) {
-	    if(expObj[i].name === $(this).children().attr("name")) {
-		expObj.splice(i,1);
+	let index = stagedExp.indexOf($(this).children().attr("exp_name"));
+	stagedExp.splice(index, 1);
+	/*update the stagedObj*/
+	for (let i = 0; i < stagedObj.length; i++) {
+		console.log(stagedObj[i].name); debugger;
+	    if(stagedObj[i].name === $(this).children().attr("exp_name")) {
+		stagedObj.splice(i,1);
 	    }
 	}
     });
