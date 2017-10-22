@@ -25,14 +25,13 @@ def save_exp():
 
     con = pymysql.connect('localhost', 'wellness_dev', 'wellness_dev_pwd', 'wellness_dev_db')
     cursor = con.cursor()
-#    input('obj {}'.format(obj))
     exp_name = obj['exp_name']
     scale = obj['scale']
     if scale == '':
         scale = 5
     date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     _type = obj['type']
-    user_id = 1 #<--- this needs to be dynamic
+    user_id = obj['user_id']
     count = 0
 
     cursor.execute('SELECT `count` FROM `experiences` WHERE exp_name=\'{}\' ORDER BY date DESC LIMIT 1'.format(exp_name))
@@ -98,12 +97,16 @@ def signin():
     """ Authorizes a user to enter their member page  """
     email = json.loads(request.data.decode('utf-8'))[0]['email']
     password = json.loads(request.data.decode('utf-8'))[0]['password']
-    if user_exists(email, password):
-        return jsonify(True)
+    user_creds = user_exists(email, password)
+    if user_creds:
+        user_id = user_creds[0]
+        return jsonify((user_id, True))
+#        return jsonify(True)
     return jsonify(False)
 
 def user_exists(email, password=None):
-    """ confirms existance of email in 'credentials table', w. option to validate email  """
+    """ confirms existance of email in 'credentials table', w. option to validate email  
+    Return: calue of id column in credentials table"""
     con = pymysql.connect('localhost', 'wellness_dev', 'wellness_dev_pwd', 'wellness_dev_db')
     cursor = con.cursor()
     results = ()
@@ -115,7 +118,10 @@ def user_exists(email, password=None):
         results = cursor.fetchall()
     if results == (()):
         return False
-    return True
+    return results[0]
+#    input(results)
+#    return True
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001)

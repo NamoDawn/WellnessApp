@@ -1,9 +1,11 @@
-const $ = window.$;
+//const $ = window.$;
 
 let stagedExp = [];
 let stagedObj = [];
-
-$(document).ready(function(){
+let userId;
+$(document).ready(function () {
+	userId = JSON.parse(atob(localStorage.getItem('data')))['user_id'];
+	//localStorage.removeItem('data');
     /* Add positive button clicked
      * Positive Experience Button Clicked adds to build expObj*/
     $("#positive-add").on('click', function () {
@@ -26,8 +28,7 @@ $(document).ready(function(){
      * Negative Experience Button Clicked adds to build expObj*/
     $("#negative-add").click(function(){
         let name = $('#negative').val();
-        let scale = $('#negative_scale').val();
-
+        let scale = $('#negative_scale').val();;
 		queueExp(name, scale, 'negative')
 		$('#negative').val('');
 		$('#negative_scale').val('');
@@ -60,7 +61,7 @@ function queueExp(name, scale, type) {
         const icon = $('<span/>', {class: 'glyphicon glyphicon-remove-circle remove-icon'}).appendTo(grid);
         const text = $('<span/>', {class: 'symdisplay', id:name+scale, name: name, text:name + '(' + scale + ')'}).appendTo(icon);
 		stagedExp.push(name);
-		stagedObj.push({'exp_name': name, 'scale':scale, 'type': type})
+		stagedObj.push({'exp_name': name, 'scale':scale, 'type': type, 'user_id': userId})
 	}
 }
 

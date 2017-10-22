@@ -1,5 +1,4 @@
 const $ = window.$;
-
 $(document).ready(function () {
     /* JQuery Section
      * Sign up button clicked will retrieve the input fields and call function signup*/
@@ -51,10 +50,10 @@ $(document).ready(function () {
 	    contentType: 'text',
 	    success: function (res) {
 		$( location ).attr("href", 'http://localhost:5001/experience');
-		console.log()
+			console.log()
 	    },
 	    error: function (res) {
-		console.log('Failed to call endpoint "experience"')
+			console.log('Failed to call endpoint "experience"')
 	    }
 	});
     }
@@ -66,28 +65,38 @@ $(document).ready(function () {
      * http method: POST
      * onSuccess: redirects user to /experience*/
     function signin(email, password) {
-	creds = [{'email':email, 'password':password}];
-	$.ajax({
-	    url: 'http://localhost:5001/signin',
-	    type: 'POST',
-	    dataType: 'json',
-	    contentType: 'application/json',
-	    data: JSON.stringify(creds),
-	    success: function (res) {
-		if (res == true) {
-		    console.log('Logged In!')
-		    $( location ).attr("href", 'http://localhost:5001/experience');
-		} else {
-		    console.log('Login failed')
-		    return false;
-		}
-	    },
-	    error: function (res) {
-		console.log('error with signin:' + res);
-	    }
-	});
+		creds = [{'email':email, 'password':password}];
+		$.ajax({
+			url: 'http://localhost:5001/signin',
+			type: 'POST',
+			dataType: 'json',
+			contentType: 'application/json',
+			data: JSON.stringify(creds),
+			success: function (res) {
+//				const store = btoa(JSON.stringify(email));
+//				localStorage.setItem('currentUser', store);
+//				saveData({'email':email});
+//				console.log(res); debugger;
+				if (res[1] == true) {
+					saveData({'user_id': res[0]});
+					console.log('Logged In!')
+					
+					$( location ).attr("href", 'http://localhost:5001/experience');
+				} else {
+					console.log('Login failed')
+					return false;
+				}
+			},
+			error: function (res) {
+				console.log('error with signin:' + res);
+			}
+		});
     }
 
+	function saveData(data = {}) {
+		data = btoa(JSON.stringify(data));
+		localStorage.setItem('data', data);
+	}
     /* Sign User up
      * method: signup
      * parameter(s): email, password, f_name, l_name
