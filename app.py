@@ -19,14 +19,14 @@ def mainpage():
 
 @app.route('/save_exp/', methods=['GET', 'OPTIONS', 'POST'], strict_slashes=False)
 def save_exp():
-    """ inserts new symptom into 'experiences' table """
+    """ inserts new experience into 'experiences' table """
     response = request.data.decode('utf-8')
     obj = json.loads(response)
 
     con = pymysql.connect('localhost', 'wellness_dev', 'wellness_dev_pwd', 'wellness_dev_db')
     cursor = con.cursor()
 #    input('obj {}'.format(obj))
-    symp_name = obj['symp_name']
+    exp_name = obj['exp_name']
     scale = obj['scale']
     if scale == '':
         scale = 5
@@ -35,28 +35,28 @@ def save_exp():
     user_id = 1 #<--- this needs to be dynamic
     count = 0
 
-    cursor.execute('SELECT `frequency` FROM `experiences` WHERE symp_name=\'{}\' ORDER BY date DESC LIMIT 1'.format(symp_name))
+    cursor.execute('SELECT `count` FROM `experiences` WHERE exp_name=\'{}\' ORDER BY date DESC LIMIT 1'.format(exp_name))
     result = cursor.fetchall();
     if not result:
         count = 1;
     else:
         count += result[0][0] + 1;
 
-    cursor.execute('INSERT INTO experiences (symp_name, scale, date, type, user_id, frequency) VALUES("{}", "{}", "{}", "{}", "{}", "{}")'.format(symp_name, scale, date, _type, user_id, count))
+    cursor.execute('INSERT INTO experiences (exp_name, scale, date, type, user_id, count) VALUES("{}", "{}", "{}", "{}", "{}", "{}")'.format(exp_name, scale, date, _type, user_id, count))
     con.commit()
     con.close()
 
 # can't use until email is imported from sign in
-#    if data_exists(symp_name, date):
+#    if data_exists(exp_name, date):
 #        return jsonify(True)
     return jsonify(False)
 
-def data_exists(symp_name, date):
-    """ confirms existance of symptom entry  in 'experiences table'"""
+def data_exists(exp_name, date):
+    """ confirms existance of experience entry  in 'experiences table'"""
     con = pymysql.connect('localhost', 'wellness_dev', 'wellness_dev_pwd', 'wellness_dev_db')
     cursor = con.cursor()
     results = ()
-    var1 = cursor.execute("SELECT EXISTS(SELECT 1 FROM experiences WHERE symp_name='{}' AND date='{}')".format(symp_name, date))
+    var1 = cursor.execute("SELECT EXISTS(SELECT 1 FROM experiences WHERE exp_name='{}' AND date='{}')".format(exp_name, date))
     print(var1)
     results = cursor.fetchone()
     cursor.execute("SELECT * FROM credentials WHERE email='{}'".format(email))

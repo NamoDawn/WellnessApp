@@ -60,7 +60,7 @@ function queueExp(name, scale, type) {
         const icon = $('<span/>', {class: 'glyphicon glyphicon-remove-circle remove-icon'}).appendTo(grid);
         const text = $('<span/>', {class: 'symdisplay', id:name+scale, name: name, text:name + '(' + scale + ')'}).appendTo(icon);
 		stagedExp.push(name);
-		stagedObj.push({'symp_name': name, 'scale':scale, 'type': type})
+		stagedObj.push({'exp_name': name, 'scale':scale, 'type': type})
 	}
 }
 

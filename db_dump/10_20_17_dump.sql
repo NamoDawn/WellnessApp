@@ -50,10 +50,10 @@ DROP TABLE IF EXISTS `experiences`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `experiences` (
-  `symp_name` varchar(20) DEFAULT NULL,
+  `exp_name` varchar(20) DEFAULT NULL,
   `scale` int(11) DEFAULT NULL,
   `date` datetime DEFAULT NULL,
-  `frequency` int(11) NOT NULL DEFAULT '1',
+  `count` int(11) NOT NULL DEFAULT '1',
   `type` varchar(10) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
   KEY `user_id` (`user_id`),
