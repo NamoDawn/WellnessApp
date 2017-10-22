@@ -81,16 +81,11 @@ a.bubble-label {
 
 
 .bubble-label .bubble-label-value {
-  font: 12px sans-serif;
-  font-weight: bold;
-  white-space: nowrap;
-}
-
-.bubble-label .bubble-label-scale {
   font: 11px sans-serif;
   white-space: nowrap;
 }
 
+}
 footer p {
   text-align: center;
   padding-top:20px;

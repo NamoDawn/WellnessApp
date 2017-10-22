@@ -423,9 +423,10 @@ root.plotData = (selector, data, plot) ->
     .call(plot)
 
 texts = [
-  {key:"week",file:"everything.csv",name:"Week"}
-  {key:"month",file:"everything.csv",name:"Month"}
-  {key:"everything",file:"everything.csv",name:"Everything"}
+  {key:"sherlock",file:"top_sherlock.csv",name:"The Adventures of Sherlock Holmes"}
+  {key:"aesop",file:"top_aesop.csv",name:"Aesop's Fables"}
+  {key:"everything",file:"everything.csv",name:"Alice's Adventures in Wonderland"}
+  {key:"gulliver",file:"top_gulliver.csv",name:"Gulliver's Travels"}
 ]
 
 # ---
