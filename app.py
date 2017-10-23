@@ -37,6 +37,7 @@ def save_exp():
     """
     response = request.data.decode('utf-8')
     objects = json.loads(response)
+
     con = connect_db()
     cursor = con.cursor()
 
@@ -83,6 +84,7 @@ def save_exp():
                     con.commit()
                 else:
                     dates.append(item[1])
+
         if is_dupe is False:
             cursor.execute(
                 'INSERT INTO experiences (exp_name, scale, date, type, user_id, count) \
@@ -91,25 +93,6 @@ def save_exp():
             con.commit()
     con.close()
     return jsonify(True)
-
-
-def data_exists(exp_name, date):
-    """
-    confirms existance of experience entry in 'experiences table'
-    Return: False if 'results' tuple is empty. True otherwise.
-    """
-    con = connect_db()
-    cursor = con.cursor()
-    results = ()
-    var1 = cursor.execute("SELECT EXISTS(SELECT 1 \
-    FROM experiences \
-    WHERE exp_name='{}' AND date='{}')".format(exp_name, date))
-    results = cursor.fetone()
-    cursor.execute("SELECT * FROM credentials WHERE email='{}'".format(email))
-    results = cursor.fetchall()
-    if results == (()):
-        return False
-    return True
 
 
 @app.route('/signup/', methods=['POST'], strict_slashes=False)
