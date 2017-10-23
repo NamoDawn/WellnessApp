@@ -12,7 +12,6 @@ cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route('/', strict_slashes=False)
 def mainpage():
-    # TODO: create a landing page. indecx.html should be landing, not login.html
     return render_template('login.html',
                            cache_id=uuid.uuid4()
     )
@@ -29,25 +28,32 @@ def save_exp():
     scale = obj['scale']
     if scale == '':
         scale = 5
-    date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    date = datetime.now().strftime('%Y-%m-%d 00:00:00')
     _type = obj['type']
     user_id = obj['user_id']
     count = 0
 
-    cursor.execute('SELECT `count` FROM `experiences` WHERE exp_name=\'{}\' ORDER BY date DESC LIMIT 1'.format(exp_name))
+    cursor.execute('SELECT `count`, `date` FROM `experiences` WHERE exp_name=\'{}\' AND date=\'{}\' ORDER BY date DESC'.format(exp_name, date))
+
     result = cursor.fetchall();
+    dates = [];
+
     if not result:
-        count = 1;
+        count = 1
     else:
-        count += result[0][0] + 1;
+        for item in result:
+            if date == str(item[1]):
+                cursor.execute("UPDATE experiences set count=count+1 where date='{}'".format(date))
+                con.commit()
+                con.close()
+                return jsonify(True)
+            else:
+                dates.append(item[1])
 
     cursor.execute('INSERT INTO experiences (exp_name, scale, date, type, user_id, count) VALUES("{}", "{}", "{}", "{}", "{}", "{}")'.format(exp_name, scale, date, _type, user_id, count))
     con.commit()
     con.close()
 
-# can't use until email is imported from sign in
-#    if data_exists(exp_name, date):
-#        return jsonify(True)
     return jsonify(False)
 
 def data_exists(exp_name, date):
@@ -101,7 +107,6 @@ def signin():
     if user_creds:
         user_id = user_creds[0]
         return jsonify((user_id, True))
-#        return jsonify(True)
     return jsonify(False)
 
 def user_exists(email, password=None):
@@ -119,9 +124,6 @@ def user_exists(email, password=None):
     if results == (()):
         return False
     return results[0]
-#    input(results)
-#    return True
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001)
