@@ -1,14 +1,21 @@
 #!/usr/bin/python3
-from flask import Flask, render_template, jsonify, request
-import pymysql
-from flask_cors import CORS, cross_origin
-import json
-import uuid
 from datetime import datetime
+from flask_cors import CORS, cross_origin
+from flask import Flask, render_template, jsonify, request
+import json
+import os
+import pymysql
 import time
+import uuid
 
+api_host = os.getenv('WELLNESS_API_HOST')
+api_port = os.getenv('WELLNESS_API_PORT')
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
+user = os.getenv('WELLNESS_MYSQL_USER')
+password = os.getenv('WELLNESS_MYSQL_PWD')
+host = os.getenv('WELLNESS_MYSQL_HOST')
+db = os.getenv('WELLNESS_MYSQL_DB')
 
 
 @app.route('/', strict_slashes=False)
@@ -29,51 +36,60 @@ def save_exp():
     Return: always returns jsonified True
     """
     response = request.data.decode('utf-8')
-    obj = json.loads(response)
-
-    con = pymysql.connect('localhost', 'wellness_dev',
-                          'wellness_dev_pwd', 'wellness_dev_db')
+    objects = json.loads(response)
+    con = connect_db()
     cursor = con.cursor()
-    exp_name = obj['exp_name']
-    scale = obj['scale']
-    date = datetime.now().strftime('%Y-%m-%d 00:00:00')
-    exp_type = obj['type']
-    user_id = obj['user_id']
-    count = 0
-    dates = []
 
-    if scale == '':
-        scale = 5
+    for obj in objects:
+        exp_name = obj['exp_name']
+        scale = obj['scale']
+        date = datetime.now().strftime('%Y-%m-%d 00:00:00')
+        exp_type = obj['type']
+        user_id = obj['user_id']
+        count = 0
+        dates = []
+        is_dupe = False
 
-    cursor.execute('SELECT `count`, `date` \
-    FROM `experiences` \
-    WHERE exp_name=\'{}\' AND date=\'{}\' \
-    ORDER BY date DESC'.format(exp_name, date))
+        if scale == '':
+            scale = 5
 
-    result = cursor.fetchall()
+        cursor.execute('SELECT `count`, `date`, `type` \
+        FROM `experiences` \
+        WHERE exp_name=\'{}\' AND date=\'{}\' \
+        ORDER BY date DESC'.format(exp_name, date))
+        result = cursor.fetchall()
+        if not result:
+            count = 1
+        else:
+            for item in result:
+                if exp_type == str(item[2]) and date == str(item[1]):
+                    cursor.execute("UPDATE experiences \
+                    SET count=count+1 \
+                    WHERE exp_name='{}' AND date='{}'".format(exp_name, date))
+                    cursor.execute("SELECT `scale`, `count` \
+                    FROM experiences \
+                    WHERE exp_name='{}' \
+                    AND date LIKE '{}%'".format(exp_name, date))
+                    result = cursor.fetchall()[0]
+                    db_scale = int(result[0])
+                    db_count = int(result[1])
+                    avg = ((db_scale) + int(scale)) / db_count
 
-    if not result:
-        count = 1
-    else:
-        for item in result:
-            if date == str(item[1]):
-                cursor.execute("UPDATE experiences \
-                SET count=count+1 \
-                WHERE date='{}'".format(date))
-
-                con.commit()
-                con.close()
-                return jsonify(True)
-            else:
-                dates.append(item[1])
-
-    cursor.execute(
-        'INSERT INTO experiences (exp_name, scale, date, type, user_id, count) \
-        VALUES("{}", "{}", "{}", "{}", "{}", "{}")'.format(
-            exp_name, scale, date, exp_type, user_id, count))
-    con.commit()
+                    cursor.execute("UPDATE experiences \
+                    SET scale={} \
+                    WHERE exp_name='{}' \
+                    AND date='{}'".format(avg, exp_name, date))
+                    is_dupe = True
+                    con.commit()
+                else:
+                    dates.append(item[1])
+        if is_dupe is False:
+            cursor.execute(
+                'INSERT INTO experiences (exp_name, scale, date, type, user_id, count) \
+                VALUES("{}", "{}", "{}", "{}", "{}", "{}")'.format(
+                    exp_name, scale, date, exp_type, user_id, count))
+            con.commit()
     con.close()
-
     return jsonify(True)
 
 
@@ -82,16 +98,13 @@ def data_exists(exp_name, date):
     confirms existance of experience entry in 'experiences table'
     Return: False if 'results' tuple is empty. True otherwise.
     """
-    con = pymysql.connect('localhost',
-                          'wellness_dev',
-                          'wellness_dev_pwd',
-                          'wellness_dev_db')
+    con = connect_db()
     cursor = con.cursor()
     results = ()
     var1 = cursor.execute("SELECT EXISTS(SELECT 1 \
     FROM experiences \
     WHERE exp_name='{}' AND date='{}')".format(exp_name, date))
-    results = cursor.fetchone()
+    results = cursor.fetone()
     cursor.execute("SELECT * FROM credentials WHERE email='{}'".format(email))
     results = cursor.fetchall()
     if results == (()):
@@ -111,10 +124,7 @@ def signup():
     password = obj[0].get('password')
     if user_exists(email):
         return jsonify(True)
-    con = pymysql.connect('localhost',
-                          'wellness_dev',
-                          'wellness_dev_pwd',
-                          'wellness_dev_db')
+    con = connect_db()
     cursor = con.cursor()
 
     cursor.execute("INSERT INTO credentials (email, password, f_name, l_name) \
@@ -163,10 +173,7 @@ def user_exists(email, password=None):
     w. option to validate email
     Return: value of id column in credentials table
     """
-    con = pymysql.connect('localhost',
-                          'wellness_dev',
-                          'wellness_dev_pwd',
-                          'wellness_dev_db')
+    con = connect_db()
     cursor = con.cursor()
     results = []
     if password:
@@ -181,5 +188,19 @@ def user_exists(email, password=None):
         return False
     return results[0]
 
+
+def connect_db():
+    """
+    makes connection to mysql db, wellness_dev_db
+    Return: an open connection to the db
+    """
+    con = pymysql.connect(host=host,
+                          user=user,
+                          password=password,
+                          db=db)
+
+    return con
+
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001)
+    app.run(host=api_host, port=api_port)
