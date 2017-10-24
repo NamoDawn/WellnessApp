@@ -29,62 +29,63 @@ def save_exp():
     Return: always returns jsonified True
     """
     response = request.data.decode('utf-8')
-    obj = json.loads(response)
+    objects = json.loads(response)
 
     con = pymysql.connect('localhost', 'wellness_dev',
                           'wellness_dev_pwd', 'wellness_dev_db')
     cursor = con.cursor()
-    exp_name = obj['exp_name']
-    scale = obj['scale']
-    date = datetime.now().strftime('%Y-%m-%d 00:00:00')
-    exp_type = obj['type']
-    user_id = obj['user_id']
-    count = 0
-    dates = []
 
-    if scale == '':
-        scale = 5
+    for obj in objects:
+        exp_name = obj['exp_name']
+        scale = obj['scale']
+        date = datetime.now().strftime('%Y-%m-%d 00:00:00')
+        exp_type = obj['type']
+        user_id = obj['user_id']
+        count = 0
+        dates = []
+        is_dupe = False
 
-    cursor.execute('SELECT `count`, `date`, `type` \
-    FROM `experiences` \
-    WHERE exp_name=\'{}\' AND date=\'{}\' \
-    ORDER BY date DESC'.format(exp_name, date))
-    result = cursor.fetchall()
-    if not result:
-        count = 1
-    else:
-        for item in result:
-            print(exp_type)
-            if exp_type == str(item[2]) and date == str(item[1]):
-                cursor.execute("UPDATE experiences \
-                SET count=count+1 \
-                WHERE exp_name='{}' AND date='{}'".format(exp_name, date))
-                cursor.execute("SELECT `scale`, `count` \
-                FROM experiences \
-                WHERE exp_name='{}' \
-                AND date LIKE '{}%'".format(exp_name, date))
-                result = cursor.fetchall()[0]
-                db_scale = int(result[0])
-                db_count = int(result[1])
-                avg = ((db_scale) + int(scale)) / db_count
+        if scale == '':
+            scale = 5
 
-                cursor.execute("UPDATE experiences \
-                SET scale={} \
-                WHERE exp_name='{}' AND date='{}'".format(avg, exp_name, date))
+        cursor.execute('SELECT `count`, `date`, `type` \
+        FROM `experiences` \
+        WHERE exp_name=\'{}\' AND date=\'{}\' \
+        ORDER BY date DESC'.format(exp_name, date))
+        result = cursor.fetchall()
+        if not result:
+            count = 1
+        else:
+            for item in result:
+                if exp_type == str(item[2]) and date == str(item[1]):
+                    cursor.execute("UPDATE experiences \
+                    SET count=count+1 \
+                    WHERE exp_name='{}' AND date='{}'".format(exp_name, date))
+                    cursor.execute("SELECT `scale`, `count` \
+                    FROM experiences \
+                    WHERE exp_name='{}' \
+                    AND date LIKE '{}%'".format(exp_name, date))
+                    result = cursor.fetchall()[0]
+                    db_scale = int(result[0])
+                    db_count = int(result[1])
+                    avg = ((db_scale) + int(scale)) / db_count
 
-                con.commit()
-                con.close()
-                return jsonify(True)
-            else:
-                dates.append(item[1])
+                    cursor.execute("UPDATE experiences \
+                    SET scale={} \
+                    WHERE exp_name='{}' \
+                    AND date='{}'".format(avg, exp_name, date))
+                    is_dupe = True
+                    con.commit()
+                else:
+                    dates.append(item[1])
 
-    cursor.execute(
-        'INSERT INTO experiences (exp_name, scale, date, type, user_id, count) \
-        VALUES("{}", "{}", "{}", "{}", "{}", "{}")'.format(
-            exp_name, scale, date, exp_type, user_id, count))
-    con.commit()
+        if is_dupe is False:
+            cursor.execute(
+                'INSERT INTO experiences (exp_name, scale, date, type, user_id, count) \
+                VALUES("{}", "{}", "{}", "{}", "{}", "{}")'.format(
+                    exp_name, scale, date, exp_type, user_id, count))
+            con.commit()
     con.close()
-
     return jsonify(True)
 
 
