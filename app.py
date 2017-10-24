@@ -95,26 +95,6 @@ def save_exp():
     return jsonify(True)
 
 
-def data_exists(exp_name, date):
-    """
-    confirms existance of experience entry in 'experiences table'
-    Return: False if 'results' tuple is empty. True otherwise.
-    """
-    con = connect_db()
-
-    cursor = con.cursor()
-    results = ()
-    var1 = cursor.execute("SELECT EXISTS(SELECT 1 \
-    FROM experiences \
-    WHERE exp_name='{}' AND date='{}')".format(exp_name, date))
-    results = cursor.fetone()
-    cursor.execute("SELECT * FROM credentials WHERE email='{}'".format(email))
-    results = cursor.fetchall()
-    if results == (()):
-        return False
-    return True
-
-
 @app.route('/signup/', methods=['POST'], strict_slashes=False)
 def signup():
     """
