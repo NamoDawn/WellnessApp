@@ -49,8 +49,7 @@ $(document).ready(function () {
 	    type: 'GET',
 	    contentType: 'text',
 	    success: function (res) {
-		$( location ).attr("href", 'http://localhost:5001/experience');
-			console.log()
+			$( location ).attr("href", 'http://localhost:5001/experience');
 	    },
 	    error: function (res) {
 			console.error('Failed to call endpoint "experience"')
@@ -66,7 +65,6 @@ $(document).ready(function () {
      * onSuccess: redirects user to /experience*/
     function signin(email, password) {
 		creds = [{'email':email, 'password':password}];
-		console.log(JSON.stringify(creds));
 		$.ajax({
 			url: 'http://localhost:5001/signin',
 			type: 'POST',
@@ -74,17 +72,11 @@ $(document).ready(function () {
 			contentType: 'application/json',
 			data: JSON.stringify(creds),
 			success: function (res) {
-//				const store = btoa(JSON.stringify(email));
-//				localStorage.setItem('currentUser', store);
-//				saveData({'email':email});
-//				console.log(res); debugger;
 				if (res[1] == true) {
 					saveData({'user_id': res[0]});
-					console.log('Logged In!')
 					
 					$( location ).attr("href", 'http://localhost:5001/experience');
 				} else {
-					console.log('Login failed')
 					return false;
 				}
 			},
@@ -113,7 +105,7 @@ $(document).ready(function () {
 			contentType: 'application/json',
 			data: JSON.stringify(creds),
 			success: function (res) {
-				console.log(res);
+
 			},
 			error: function (res) {
 				console.error('error with signup:' + res);

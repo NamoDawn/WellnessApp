@@ -44,7 +44,6 @@ $(document).ready(function () {
 	stagedExp.splice(index, 1);
 	/*update the stagedObj*/
 	for (let i = 0; i < stagedObj.length; i++) {
-		console.log(stagedObj[i].name); debugger;
 	    if(stagedObj[i].name === $(this).children().attr("exp_name")) {
 		stagedObj.splice(i,1);
 	    }
@@ -76,7 +75,7 @@ $(document).ready(function () {
 				contentType: 'application/json',
 				data: JSON.stringify(obj),
 				success: function (res) {
-					console.log(res)
+
 				},
 				error: function (res) {
 					console.error('Error: ' + res);
