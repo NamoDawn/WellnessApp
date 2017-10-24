@@ -45,21 +45,32 @@ def save_exp():
     if scale == '':
         scale = 5
 
-    cursor.execute('SELECT `count`, `date` \
+    cursor.execute('SELECT `count`, `date`, `type` \
     FROM `experiences` \
     WHERE exp_name=\'{}\' AND date=\'{}\' \
     ORDER BY date DESC'.format(exp_name, date))
-
     result = cursor.fetchall()
-
     if not result:
         count = 1
     else:
         for item in result:
-            if date == str(item[1]):
+            print(exp_type)
+            if exp_type == str(item[2]) and date == str(item[1]):
                 cursor.execute("UPDATE experiences \
                 SET count=count+1 \
-                WHERE date='{}'".format(date))
+                WHERE exp_name='{}' AND date='{}'".format(exp_name, date))
+                cursor.execute("SELECT `scale`, `count` \
+                FROM experiences \
+                WHERE exp_name='{}' \
+                AND date LIKE '{}%'".format(exp_name, date))
+                result = cursor.fetchall()[0]
+                db_scale = int(result[0])
+                db_count = int(result[1])
+                avg = ((db_scale) + int(scale)) / db_count
+
+                cursor.execute("UPDATE experiences \
+                SET scale={} \
+                WHERE exp_name='{}' AND date='{}'".format(avg, exp_name, date))
 
                 con.commit()
                 con.close()
@@ -91,7 +102,7 @@ def data_exists(exp_name, date):
     var1 = cursor.execute("SELECT EXISTS(SELECT 1 \
     FROM experiences \
     WHERE exp_name='{}' AND date='{}')".format(exp_name, date))
-    results = cursor.fetchone()
+    results = cursor.fetone()
     cursor.execute("SELECT * FROM credentials WHERE email='{}'".format(email))
     results = cursor.fetchall()
     if results == (()):
