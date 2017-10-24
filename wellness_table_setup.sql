@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `credentials`;
 CREATE TABLE `credentials` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(255) NOT NULL,
-  `password` varchar(60) NOT NULL,
+  `password` varchar(128) NOT NULL,
   `f_name` varchar(64) NOT NULL,
   `l_name` varchar(64) NOT NULL,
   PRIMARY KEY (`id`)
