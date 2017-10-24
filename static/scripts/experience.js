@@ -1,9 +1,10 @@
-//const $ = window.$;
+const $ = window.$;
 
-let stagedExp = [];
-let stagedObj = [];
-let userId;
 $(document).ready(function () {
+	let stagedExp = [];
+	let stagedObj = [];
+	let userId;
+
 	userId = JSON.parse(atob(localStorage.getItem('data')))['user_id'];
 	//localStorage.removeItem('data');
     /* Add positive button clicked
@@ -49,38 +50,40 @@ $(document).ready(function () {
 	    }
 	}
     });
+	
+	function queueExp(name, scale, type) {
+		if (scale == '') {
+			scale = 5;
+		}
+		/*checks if the experience was already added in the current session already*/
+		if (!stagedExp.includes(name) && name != "") {
+			const experienceadded = $('#experienceAdded');
+			let grid = $('<div/>', {class: 'col-xs-3'}).appendTo(experienceadded);
+			const icon = $('<span/>', {class: 'glyphicon glyphicon-remove-circle remove-icon'}).appendTo(grid);
+			const text = $('<span/>', {class: 'symdisplay', id:name+scale, name: name, text:name + '(' + scale + ')'}).appendTo(icon);
+			stagedExp.push(name);
+			stagedObj.push({'exp_name': name, 'scale':scale, 'type': type, 'user_id': userId})
+		}
+	}
+	
+	function save_experiences(stagedObj) {
+		for (let i = 0; i < stagedObj.length; i++) {
+			const obj = stagedObj[i]
+			$.ajax({
+				url: 'http://localhost:5001/save_exp',
+				type: 'POST',
+				dataType: 'json',
+				contentType: 'application/json',
+				data: JSON.stringify(obj),
+				success: function (res) {
+					console.log(res)
+				},
+				error: function (res) {
+					console.error('Error: ' + res);
+				}
+			});
+		}
+	}
+
 });
 
-function queueExp(name, scale, type) {
-	if (scale == '') {
-		scale = 5;
-	}
-	/*checks if the experience was already added in the current session already*/
-	if (!stagedExp.includes(name) && name != "") {
-        const experienceadded = $('#experienceAdded');
-        let grid = $('<div/>', {class: 'col-xs-3'}).appendTo(experienceadded);
-        const icon = $('<span/>', {class: 'glyphicon glyphicon-remove-circle remove-icon'}).appendTo(grid);
-        const text = $('<span/>', {class: 'symdisplay', id:name+scale, name: name, text:name + '(' + scale + ')'}).appendTo(icon);
-		stagedExp.push(name);
-		stagedObj.push({'exp_name': name, 'scale':scale, 'type': type, 'user_id': userId})
-	}
-}
-
-function save_experiences(stagedObj) {
-	for (let i = 0; i < stagedObj.length; i++) {
-		const obj = stagedObj[i]
-		$.ajax({
-			url: 'http://localhost:5001/save_exp',
-			type: 'POST',
-			dataType: 'json',
-			contentType: 'application/json',
-			data: JSON.stringify(obj),
-			success: function (res) {
-				console.log(res)
-			},
-			error: function (res) {
-				console.error('Error: ' + res);
-			}
-		});
-	}
-}

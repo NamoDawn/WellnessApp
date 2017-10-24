@@ -53,7 +53,7 @@ $(document).ready(function () {
 			console.log()
 	    },
 	    error: function (res) {
-			console.log('Failed to call endpoint "experience"')
+			console.error('Failed to call endpoint "experience"')
 	    }
 	});
     }
@@ -66,6 +66,7 @@ $(document).ready(function () {
      * onSuccess: redirects user to /experience*/
     function signin(email, password) {
 		creds = [{'email':email, 'password':password}];
+		console.log(JSON.stringify(creds));
 		$.ajax({
 			url: 'http://localhost:5001/signin',
 			type: 'POST',
@@ -88,7 +89,7 @@ $(document).ready(function () {
 				}
 			},
 			error: function (res) {
-				console.log('error with signin:' + res);
+				console.error('error with signin:' + res);
 			}
 		});
     }
