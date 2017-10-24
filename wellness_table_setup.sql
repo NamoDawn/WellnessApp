@@ -29,7 +29,7 @@ CREATE TABLE `credentials` (
   `f_name` varchar(64) NOT NULL,
   `l_name` varchar(64) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,6 +38,7 @@ CREATE TABLE `credentials` (
 
 LOCK TABLES `credentials` WRITE;
 /*!40000 ALTER TABLE `credentials` DISABLE KEYS */;
+INSERT INTO `credentials` VALUES (13,'myemail@gmail.com','my_pwd','Stuart','Kuredjian');
 /*!40000 ALTER TABLE `credentials` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -59,7 +60,7 @@ CREATE TABLE `experiences` (
   PRIMARY KEY (`id`),
   KEY `fk_user` (`user_id`),
   CONSTRAINT `experiences_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `credentials` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,6 +69,7 @@ CREATE TABLE `experiences` (
 
 LOCK TABLES `experiences` WRITE;
 /*!40000 ALTER TABLE `experiences` DISABLE KEYS */;
+INSERT INTO `experiences` VALUES (17,'a',1.4,'2017-10-24 00:00:00',5,'positive',13),(18,'b',1.4,'2017-10-24 00:00:00',5,'negative',13),(19,'zz',5,'2017-10-24 00:00:00',1,'positive',13),(20,'xx',5,'2017-10-24 00:00:00',1,'negative',13),(21,'gg',5,'2017-10-24 00:00:00',1,'positive',13),(22,'fee',5,'2017-10-24 00:00:00',1,'positive',13),(23,'gyy',5,'2017-10-24 00:00:00',1,'positive',13),(24,'deer',5,'2017-10-24 00:00:00',1,'positive',13),(25,'c',4.5,'2017-10-24 00:00:00',2,'positive',13),(26,'d',6,'2017-10-24 00:00:00',2,'negative',13),(27,'e',2,'2017-10-24 00:00:00',2,'positive',13),(28,'f',7,'2017-10-24 00:00:00',2,'negative',13),(29,'Q',5,'2017-10-24 00:00:00',1,'positive',13),(30,'X',5,'2017-10-24 00:00:00',1,'negative',13),(31,'t',1,'2017-10-24 00:00:00',1,'positive',13);
 /*!40000 ALTER TABLE `experiences` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -80,4 +82,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-24  6:24:39
+-- Dump completed on 2017-10-24 16:51:54
