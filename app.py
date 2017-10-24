@@ -1,11 +1,11 @@
 #!/usr/bin/python3
-from flask import Flask, render_template, jsonify, request
-import pymysql
-from flask_cors import CORS, cross_origin
-import json
-import uuid
 from datetime import datetime
+from flask_cors import CORS, cross_origin
+from flask import Flask, render_template, jsonify, request
+import json
+import pymysql
 import time
+import uuid
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
