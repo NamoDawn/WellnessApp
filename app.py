@@ -3,12 +3,19 @@ from datetime import datetime
 from flask_cors import CORS, cross_origin
 from flask import Flask, render_template, jsonify, request
 import json
+import os
 import pymysql
 import time
 import uuid
 
+api_host = os.getenv('WELLNESS_API_HOST')
+api_port = os.getenv('WELLNESS_API_PORT')
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
+user = os.getenv('WELLNESS_MYSQL_USER')
+password = os.getenv('WELLNESS_MYSQL_PWD')
+host = os.getenv('WELLNESS_MYSQL_HOST')
+db = os.getenv('WELLNESS_MYSQL_DB')
 
 
 @app.route('/', strict_slashes=False)
@@ -31,8 +38,7 @@ def save_exp():
     response = request.data.decode('utf-8')
     objects = json.loads(response)
 
-    con = pymysql.connect('localhost', 'wellness_dev',
-                          'wellness_dev_pwd', 'wellness_dev_db')
+    con = connect_db()
     cursor = con.cursor()
 
     for obj in objects:
@@ -94,10 +100,8 @@ def data_exists(exp_name, date):
     confirms existance of experience entry in 'experiences table'
     Return: False if 'results' tuple is empty. True otherwise.
     """
-    con = pymysql.connect('localhost',
-                          'wellness_dev',
-                          'wellness_dev_pwd',
-                          'wellness_dev_db')
+    con = connect_db()
+
     cursor = con.cursor()
     results = ()
     var1 = cursor.execute("SELECT EXISTS(SELECT 1 \
@@ -123,10 +127,7 @@ def signup():
     password = obj[0].get('password')
     if user_exists(email):
         return jsonify(True)
-    con = pymysql.connect('localhost',
-                          'wellness_dev',
-                          'wellness_dev_pwd',
-                          'wellness_dev_db')
+    con = connect_db()
     cursor = con.cursor()
 
     cursor.execute("INSERT INTO credentials (email, password, f_name, l_name) \
@@ -175,10 +176,7 @@ def user_exists(email, password=None):
     w. option to validate email
     Return: value of id column in credentials table
     """
-    con = pymysql.connect('localhost',
-                          'wellness_dev',
-                          'wellness_dev_pwd',
-                          'wellness_dev_db')
+    con = connect_db()
     cursor = con.cursor()
     results = []
     if password:
@@ -193,5 +191,19 @@ def user_exists(email, password=None):
         return False
     return results[0]
 
+
+def connect_db():
+    """
+    makes connection to mysql db, wellness_dev_db
+    Return: an open connection to the db
+    """
+    con = pymysql.connect(host=host,
+                          user=user,
+                          password=password,
+                          db=db)
+
+    return con
+
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001)
+    app.run(host=api_host, port=api_port)
