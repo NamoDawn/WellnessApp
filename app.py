@@ -76,15 +76,15 @@ def signup():
     response = request.data.decode('utf-8')
     print('response: {}'.format(response))
     obj = json.loads(response)
-    email = obj[0]['email']
-    password = obj[0]['password']
+    email = obj[0].get('email')
+    password = obj[0].get('password')
     if user_exists(email):
         print('This email is already registered')
         return jsonify(True)
     con = pymysql.connect('localhost', 'wellness_dev', 'wellness_dev_pwd', 'wellness_dev_db')
     cursor = con.cursor()
 
-    cursor.execute("INSERT INTO credentials (email, password, f_name, l_name) VALUES('{}', '{}', '{}', '{}')".format(email, password, obj[0]['f_name'], obj[0]['l_name']))
+    cursor.execute("INSERT INTO credentials (email, password, f_name, l_name) VALUES('{}', '{}', '{}', '{}')".format(email, password, obj[0].get('f_name'), obj[0].get('l_name')))
     con.commit()
     con.close()
     if user_exists(email):
@@ -101,12 +101,16 @@ def experience():
 @app.route('/signin/', methods=['POST'], strict_slashes=False)
 def signin():
     """ Authorizes a user to enter their member page  """
-    email = json.loads(request.data.decode('utf-8'))[0]['email']
-    password = json.loads(request.data.decode('utf-8'))[0]['password']
-    user_creds = user_exists(email, password)
+    user_creds = []
+    try:
+        email = json.loads(request.data.decode('utf-8'))[0].get('email')
+        password = json.loads(request.data.decode('utf-8'))[0].get('password')
+        user_creds = user_exists(email, password)
+    except:
+        return jsonify(False)
     if user_creds:
-        user_id = user_creds[0]
-        return jsonify((user_id, True))
+            user_id = user_creds[0]
+            return jsonify((user_id, True))
     return jsonify(False)
 
 def user_exists(email, password=None):
@@ -114,7 +118,7 @@ def user_exists(email, password=None):
     Return: calue of id column in credentials table"""
     con = pymysql.connect('localhost', 'wellness_dev', 'wellness_dev_pwd', 'wellness_dev_db')
     cursor = con.cursor()
-    results = ()
+    results = []
     if password:
         cursor.execute("SELECT * FROM credentials WHERE email='{}' AND password='{}'".format(email, password))
         results = cursor.fetchall()
