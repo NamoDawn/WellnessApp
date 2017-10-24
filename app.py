@@ -12,15 +12,22 @@ cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 
 @app.route('/', strict_slashes=False)
-def mainpage():
+def load_main_page():
+    """
+    renders login.html
+    Reutn: rendered html
+    """
     return render_template('login.html',
                            cache_id=uuid.uuid4())
 
 
-@app.route('/save_exp/', methods=['GET', 'OPTIONS', 'POST'],
+@app.route('/save_exp/', methods=['POST'],
            strict_slashes=False)
 def save_exp():
-    """ inserts new experience into 'experiences' table """
+    """
+    inserts new experience into 'experiences' table
+    Return: always returns jsonified True
+    """
     response = request.data.decode('utf-8')
     obj = json.loads(response)
 
@@ -29,12 +36,14 @@ def save_exp():
     cursor = con.cursor()
     exp_name = obj['exp_name']
     scale = obj['scale']
-    if scale == '':
-        scale = 5
     date = datetime.now().strftime('%Y-%m-%d 00:00:00')
-    _type = obj['type']
+    exp_type = obj['type']
     user_id = obj['user_id']
     count = 0
+    dates = []
+
+    if scale == '':
+        scale = 5
 
     cursor.execute('SELECT `count`, `date` \
     FROM `experiences` \
@@ -42,7 +51,6 @@ def save_exp():
     ORDER BY date DESC'.format(exp_name, date))
 
     result = cursor.fetchall()
-    dates = []
 
     if not result:
         count = 1
@@ -59,17 +67,21 @@ def save_exp():
             else:
                 dates.append(item[1])
 
-    cursor.execute('INSERT INTO experiences (exp_name, scale, date, type, \
-    user_id, count) VALUES("{}", "{}", "{}", "{}", "{}", "{}")'.format(
-        exp_name, scale, date, _type, user_id, count))
+    cursor.execute(
+        'INSERT INTO experiences (exp_name, scale, date, type, user_id, count) \
+        VALUES("{}", "{}", "{}", "{}", "{}", "{}")'.format(
+            exp_name, scale, date, exp_type, user_id, count))
     con.commit()
     con.close()
 
-    return jsonify(False)
+    return jsonify(True)
 
 
 def data_exists(exp_name, date):
-    """ confirms existance of experience entry  in 'experiences table'"""
+    """
+    confirms existance of experience entry in 'experiences table'
+    Return: False if 'results' tuple is empty. True otherwise.
+    """
     con = pymysql.connect('localhost',
                           'wellness_dev',
                           'wellness_dev_pwd',
@@ -87,11 +99,12 @@ def data_exists(exp_name, date):
     return True
 
 
-@app.route('/signup/',
-           methods=['GET', 'OPTIONS', 'POST'],
-           strict_slashes=False)
+@app.route('/signup/', methods=['POST'], strict_slashes=False)
 def signup():
-    """ inserts new user credentials into 'credentials' table """
+    """
+    inserts new user credentials into 'credentials' table
+    Return: jsonified 'True' if user exists. False otherwise
+    """
     response = request.data.decode('utf-8')
     obj = json.loads(response)
     email = obj[0].get('email')
@@ -104,8 +117,7 @@ def signup():
                           'wellness_dev_db')
     cursor = con.cursor()
 
-    cursor.execute("INSERT INTO credentials \
-    (email, password, f_name, l_name) \
+    cursor.execute("INSERT INTO credentials (email, password, f_name, l_name) \
     VALUES('{}', '{}', '{}', '{}')".format(email, password,
                                            obj[0].get('f_name'),
                                            obj[0].get('l_name')))
@@ -117,14 +129,21 @@ def signup():
 
 
 @app.route('/experience/', strict_slashes=False)
-def experience():
-    """ renders experience.html  """
+def load_experience_page():
+    """
+    renders experience.html
+    Return: rendered html
+    """
     return render_template('experience.html')
 
 
 @app.route('/signin/', methods=['POST'], strict_slashes=False)
 def signin():
-    """ Authorizes a user to enter their member page  """
+    """
+    Authorizes a user to enter their member page
+    Reuturn: jsonified tuple (<email>, True) on
+             success. jsonified False otherwise
+    """
     user_creds = []
     try:
         email = json.loads(request.data.decode('utf-8'))[0].get('email')
@@ -139,9 +158,11 @@ def signin():
 
 
 def user_exists(email, password=None):
-    """ confirms existance of email in
-    'credentials table', w. option to validate email
-    Return: calue of id column in credentials table"""
+    """
+    Confirms existance of email in 'credentials table',
+    w. option to validate email
+    Return: value of id column in credentials table
+    """
     con = pymysql.connect('localhost',
                           'wellness_dev',
                           'wellness_dev_pwd',
