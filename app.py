@@ -4,6 +4,7 @@ from flask_cors import CORS, cross_origin
 from flask import Flask, render_template, jsonify, request
 import json
 import os
+from passlib.hash import sha256_crypt
 import pymysql
 import time
 import uuid
@@ -104,7 +105,7 @@ def signup():
     response = request.data.decode('utf-8')
     obj = json.loads(response)
     email = obj[0].get('email')
-    password = obj[0].get('password')
+    password = sha256_crypt.encrypt(obj[0].get('password'))
     if user_exists(email):
         return jsonify(True)
     con = connect_db()
@@ -121,6 +122,21 @@ def signup():
     return jsonify(False)
 
 
+def user_exists(email, password=None):
+    """
+    Confirms existance of email in 'credentials table',
+    Return: value True if exists, False otherwise
+    """
+    con = connect_db()
+    cursor = con.cursor()
+    cursor.execute("SELECT * FROM credentials \
+    WHERE email='{}'".format(email))
+    results = cursor.fetchall()
+    if results == (()):
+        return False
+    return True
+
+
 @app.route('/experience/', strict_slashes=False)
 def load_experience_page():
     """
@@ -133,24 +149,23 @@ def load_experience_page():
 @app.route('/signin/', methods=['POST'], strict_slashes=False)
 def signin():
     """
-    Authorizes a user to enter their member page
-    Reuturn: jsonified tuple (<email>, True) on
-             success. jsonified False otherwise
+    Validates user credentials
+    Reuturn: tuple of user_id and True if validated, False otherwise
     """
-    user_creds = []
     try:
         email = json.loads(request.data.decode('utf-8'))[0].get('email')
         password = json.loads(request.data.decode('utf-8'))[0].get('password')
-        user_creds = user_exists(email, password)
+        db_creds = fetch_credentials(email)
+        db_password = db_creds[2]
+        user_id = db_creds[0]
+        validated = sha256_crypt.verify(password, db_password)
     except:
-        return jsonify(False)
-    if user_creds:
-            user_id = user_creds[0]
-            return jsonify((user_id, True))
-    return jsonify(False)
+        validated = False
+
+    return jsonify((user_id, validated))
 
 
-def user_exists(email, password=None):
+def fetch_credentials(email):
     """
     Confirms existance of email in 'credentials table',
     w. option to validate email
@@ -159,16 +174,12 @@ def user_exists(email, password=None):
     con = connect_db()
     cursor = con.cursor()
     results = []
-    if password:
-        cursor.execute("SELECT * FROM credentials \
-        WHERE email='{}' AND password='{}'".format(email, password))
-        results = cursor.fetchall()
-    else:
-        cursor.execute("SELECT * FROM credentials \
-        WHERE email='{}'".format(email))
-        results = cursor.fetchall()
+    cursor.execute("SELECT * FROM credentials \
+    WHERE email='{}'".format(email))
+    results = cursor.fetchall()
+    con.close()
     if results == (()):
-        return False
+        return ()
     return results[0]
 
 
