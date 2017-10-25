@@ -72,7 +72,7 @@ $(document).ready(function () {
 			contentType: 'application/json',
 			data: JSON.stringify(creds),
 			success: function (res) {
-				if (res[1] == true) {
+				if (res[1] === true) {
 					saveData({'user_id': res[0]});
 					
 					$( location ).attr("href", 'http://localhost:5001/experience');
