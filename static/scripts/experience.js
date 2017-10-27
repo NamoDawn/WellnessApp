@@ -66,22 +66,19 @@ $(document).ready(function () {
 	}
 	
 	function save_experiences(stagedObj) {
-		for (let i = 0; i < stagedObj.length; i++) {
-			const obj = stagedObj[i]
-			$.ajax({
-				url: 'http://localhost:5001/save_exp',
-				type: 'POST',
-				dataType: 'json',
-				contentType: 'application/json',
-				data: JSON.stringify(obj),
-				success: function (res) {
+		$.ajax({
+			url: 'http://localhost:5001/save_exp',
+			type: 'POST',
+			dataType: 'json',
+			contentType: 'application/json',
+			data: JSON.stringify(stagedObj),
+			success: function (res) {
 
-				},
-				error: function (res) {
-					console.error('Error: ' + res);
-				}
-			});
-		}
+			},
+			error: function (res) {
+				console.error('Error: ' + res);
+			}
+		});
 	}
 
 });
