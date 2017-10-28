@@ -40,16 +40,16 @@ $(document).ready(function () {
 	$(this).css('background-position', amountMovedX + 'px ' + amountMovedY + 'px');
     });
     /* Load experience page with ajax
-     * endpoint: http://localhost:5001/experience
+     * endpoint: http://54.193.75.123:5000/experience
      * http method: GET
      * onSuccess: redirects user to /experience*/
     function load_experience_page() {
 	$.ajax({
-	        url: 'http://localhost:5001/experience',
+	        url: 'http://54.193.75.123:5000/experience',
 	        type: 'GET',
 	        contentType: 'text',
 	        success: function (res) {
-		    $( location ).attr("href", 'http://localhost:5001/experience');
+		    $( location ).attr("href", 'http://54.193.75.123:5000/experience');
 		        },
 	        error: function (res) {
 		    console.error('Failed to call endpoint "experience"')
@@ -60,13 +60,13 @@ $(document).ready(function () {
      * method: signin
      * parameter(s): email, password
      * additional info:
-     * endpoint: http://localhost:5001/signin
+     * endpoint: http://54.193.75.123:5000/signin
      * http method: POST
      * onSuccess: redirects user to /experience*/
     function signin(email, password) {
 	creds = [{'email':email, 'password':password}];
 	$.ajax({
-	    url: 'http://localhost:5001/signin',
+	    url: 'http://54.193.75.123:5000/signin',
 	    type: 'POST',
 	    dataType: 'json',
 	    contentType: 'application/json',
@@ -75,7 +75,7 @@ $(document).ready(function () {
 		if (res[1] === true) {
 		    saveData({'user_id': res[0]});
 		    
-		    $( location ).attr("href", 'http://localhost:5001/experience');
+		    $( location ).attr("href", 'http://54.193.75.123:5000/experience');
 		    } else {
 			return false;
 			}
@@ -94,12 +94,12 @@ $(document).ready(function () {
      * method: signup
      * parameter(s): email, password, f_name, l_name
      * additional info:
-     * endpoint: http://localhost:5001/signup
+     * endpoint: http://54.193.75.123:5000/signup
      * http method: POST*/
     function signup(email, password, f_name, l_name) {
 	const creds = [{'email': email, 'password': password, 'f_name': f_name, 'l_name': l_name}];
 	$.ajax ({
-	    url: 'http://localhost:5001/signup',
+	    url: 'http://54.193.75.123:5000/signup',
 	    type: 'POST',
 	    dataType: 'json',
 	    contentType: 'application/json',
