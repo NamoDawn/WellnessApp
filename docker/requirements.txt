@@ -1,0 +1,4 @@
+Flask
+Redis
+pymysql
+flask_cors
