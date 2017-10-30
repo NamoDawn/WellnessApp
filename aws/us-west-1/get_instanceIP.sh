@@ -6,7 +6,7 @@ son.load(sys.stdin)['Reservations']))")
 #######################
 ## Instance IP Addr  ##
 #######################
-
+sudo truncate -s 0 instance_ip.txt
 #Write instance public address to instance_ip.txt
 for ((i=0;i<$INSTANCENUM;i+=1))
 do
