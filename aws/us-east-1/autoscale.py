@@ -9,19 +9,25 @@ import time
 
 def get_metrics(instance_id):
     """ Retrieves the CPU Utilization of an instance"""
+    """ Check maximum val for the utilizationin the last 5 minutes"""
     end_time = time.strftime("%Y-%m-%dT%H:%M:%S")
-    start_time = (datetime.datetime.now() - datetime.timedelta(minutes=15)).strftime("%Y-%m-%dT%H:%M:%S")
+    start_time = (datetime.datetime.now() - datetime.timedelta(minutes=5)).strftime("%Y-%m-%dT%H:%M:%S")
+    max_util = 0.0
 
     try:
-        data = local("sudo aws cloudwatch get-metric-statistics --namespace AWS/EC2 \
-        --metric-name CPUUtilization --dimensions Name=InstanceId,Value={} \
-        --statistics Maximum --start-time {} --end-time {} --period 60".format(instance_id, start_time, end_time),capture=True)
+        data=local("sudo aws cloudwatch get-metric-statistics --namespace AWS/EC2 --metric-name CPUUtilization --dimensions Name=InstanceId,Value={} --statistics Maximum --start-time {} --end-time {} --period 60".format(instance_id, start_time, end_time),capture=True)
         try:
-            print(json.loads(data)['Datapoints'][0]['Maximum'])
+            for i in range(len(json.loads(data)['Datapoints'])):
+                max_val = json.loads(data).get('Datapoints')[i].get('Maximum')
+                if max_val > max_util:
+                    max_util = max_val
+            return max_util
         except:
-            print(0.0)
+            return None
+
     except:
         return None
+
 
 def create_instance(image_id, instance_type, security_group, key, subnet, instance_key, instance_value):
     """ Created a new instance based on the required parameters passed in: see AWS Documentation for more info"""
