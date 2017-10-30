@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#!/bin/bash
-
 TAGKEY=<key>
 TAGVALUE=<value>
 
