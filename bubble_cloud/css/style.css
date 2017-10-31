@@ -6,11 +6,11 @@ a, a:visited {
   color:white;
 }
 
-a#neg.bubble-node {
+a#negative.bubble-node {
   fill: #f8f8f8;
 }
 
-a#neg.bubble-hover {
+a#negative.bubble-hover {
   fill: white;
 }
  
