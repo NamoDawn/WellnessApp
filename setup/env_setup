@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# setup for connection to mysql db and for wellness api startup
+# FILE MUST BE SOURCED
+
+export WELLNESS_MYSQL_USER="wellness_dev"
+export WELLNESS_MYSQL_PWD="wellness_dev_pwd"
+export WELLNESS_MYSQL_HOST="localhost"
+export WELLNESS_MYSQL_DB="wellness_dev_db"
+export WELLNESS_TYPE_STORAGE="$storage_type"
+export WELLNESS_API_HOST='0.0.0.0'
+export WELLNESS_API_PORT=5001
