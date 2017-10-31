@@ -43,7 +43,9 @@ There are Fabric files that condenses all aws calls for automatic scaling and de
 
 
 ## Resource(s)
-* 
+* [Getting started with AWS CLI](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html)
+* [Working with AWS Services](http://docs.aws.amazon.com/cli/latest/userguide/chap-working-with-services.html)
+
 
 ## Author(s)
 * Lisa Leung 
