@@ -6,6 +6,12 @@ $(document).ready(function () {
   let userId;
 
   userId = JSON.parse(atob(localStorage.getItem('data')))['user_id'];
+  /* ******************** TEST BUTTON *******************/
+  //  $('#test_button').on('click', function() {
+  //    vis_csv = fetchExperiences(userId, 7)
+  //  });
+  /* ************************************************** */
+
   /* Positive Experience Button Clicked adds to build stagedObj */
   $('#positive-add').on('click', function () {
     const name = $('#positive').val();
@@ -15,7 +21,7 @@ $(document).ready(function () {
     $('#positive').val('');
     $('#positive_scale').val('');
   });
-
+  /* saves staged data to 'experiences' table */
   $('#stow_button').on('click', function () {
     saveExperiences(stagedObj);
     $('#experienceAdded').empty();
@@ -51,10 +57,10 @@ $(document).ready(function () {
       scale = 5;
     }
     if (!stagedExp.includes(name) && name !== '') {
-       const experienceadded = $('#experienceAdded');
-       let grid = $('<div/>', {class: 'col-xs-3'}).appendTo(experienceadded);
-       const icon = $('<span/>', {class: 'glyphicon glyphicon-remove-circle remove-icon'}).appendTo(grid);
-       const text = $('<span/>', {class: 'symdisplay', id:name+scale, name: name, text:name + '(' + scale + ')'}).appendTo(icon);
+      const experienceadded = $('#experienceAdded');
+      let grid = $('<div/>', {class: 'col-xs-3'}).appendTo(experienceadded);
+      const icon = $('<span/>', {class: 'glyphicon glyphicon-remove-circle remove-icon'}).appendTo(grid);
+      const text = $('<span/>', {class: 'symdisplay', id: name + scale, name: name, text: name + '(' + scale + ')'}).appendTo(icon);
       stagedExp.push(name);
       stagedObj.push({'exp_name': name, 'scale': scale, 'type': type, 'user_id': userId});
     }
@@ -69,10 +75,24 @@ $(document).ready(function () {
       contentType: 'application/json',
       data: JSON.stringify(stagedObj),
       success: function (res) {
-	  return res;
+        return res;
       },
       error: function (res) {
         console.error('Error: ' + res);
+      }
+    });
+  }
+  /* Fetches experiences based on date rage and user id */
+  function fetchExperiences (userId, priorDays) {
+    $.ajax({
+      url: '/vis/' + userId + ' ' + priorDays,
+      type: 'GET',
+      contentType: 'application/json',
+      success: function (res) {
+        return (res);
+      },
+      error: function (res, error, xhr) {
+        console.error('FAILURE: ' + error);
       }
     });
   }
