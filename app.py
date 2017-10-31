@@ -111,6 +111,8 @@ def show_vis(user_id, prior_days):
                     'type': exp[2],
                     'scale': exp[3]})
 
+    # set up diff file names depending on time window
+    file_name = ""
     with (open("vis.csv", mode="w", newline="")) as f:
         writer = csv.writer(f)
         writer.writerow(["name", "count", "type", "scale"])
@@ -131,7 +133,7 @@ def to_csv(data):
 
 
 def fetch_data(user_id, prior_days):
-    """ fetches user speicif data from 'experience' table  """
+    """ fetches user specific data from 'experience' table  """
     con = connect_db()
     cur = con.cursor()
     cur.execute("SELECT exp_name, count, type, scale \
@@ -159,7 +161,7 @@ def signup():
         return jsonify(True)
     con = connect_db()
     cursor = con.cursor()
-
+  
     cursor.execute("INSERT INTO credentials (email, password, f_name, l_name) \
     VALUES('{}', '{}', '{}', '{}')".format(email, password,
                                            obj[0].get('f_name'),

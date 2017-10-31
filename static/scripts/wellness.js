@@ -1,33 +1,5 @@
 const $ = window.$;
 $(document).ready(function () {
-/******************* START TEST ***************************/
-    function testFunction() {
-	$.ajax({
-	    url: '/laughter',
-	    type: 'GET',
-	    contentType: 'text',
-	    success: function (res) {
-		console.log('yes');
-//		window.location = '/stinky/';
-		$(location).attr('href', '/laughter');
-	    },
-	    error: function (res, error, xhr) {
-		console.log('no');
-	    }
-	});
-    }
-
-    $('#test').on('click', function () {
-	testFunction();
-    });
-  // REMOVE WHEN DONE TESTING
-  $('#si_email').val('myemail@gmail.com');
-  $('#si_password').val('my_pwd');
-
-/******************** END TEST *********************************/
-
-
-
   /* Signup event listener */
   $('#signup_button').on('click', function () {
     const email = $('#email').val();
@@ -39,11 +11,11 @@ $(document).ready(function () {
   /* Signin event listener */
   $('#signin_button').on('click', function () {
     const email = $('#si_email').val();
-    const password = $('#si_password').val()
+    const password = $('#si_password').val();
     signin(email, password);
   });
   /* Tab toggle functionality */
-  $('.tabs .tab').click(function (){
+  $('.tabs .tab').click(function () {
     if ($(this).hasClass('signin')) {
       $('.tabs .tab').removeClass('active');
       $(this).addClass('active');
@@ -95,9 +67,9 @@ $(document).ready(function () {
         if (res[1] === true) {
           saveData({'user_id': res[0]});
           setTimeout(loadExperiencePage(), 3000);
-	  setTimeout(function() {
-	      return true;
-	  }, 10000);
+          setTimeout(function () {
+            return true;
+          }, 10000);
         }
         return false;
       },

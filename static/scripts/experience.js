@@ -6,12 +6,6 @@ $(document).ready(function () {
   let userId;
 
   userId = JSON.parse(atob(localStorage.getItem('data')))['user_id'];
-  /* ******************** TEST BUTTON *******************/
-  //  $('#test_button').on('click', function() {
-  //    vis_csv = fetchExperiences(userId, 7)
-  //  });
-  /* ************************************************** */
-
   /* Positive Experience Button Clicked adds to build stagedObj */
   $('#positive-add').on('click', function () {
     const name = $('#positive').val();
