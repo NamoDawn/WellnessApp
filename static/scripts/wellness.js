@@ -1,26 +1,5 @@
 const $ = window.$;
 $(document).ready(function () {
-  function testFunction () {
-    $.ajax({
-      url: '/experience',
-      type: 'GET',
-      contentType: 'text',
-      success: function (res) {
-        console.log('yes');
-        $(location).attr('href', '/experience');
-      },
-      error: function (res, error, xhr) {
-        console.log('no');
-      }
-    });
-  }
-
-  $('#test').on('click', function () {
-    testFunction();
-  });
-  // REMOVE WHEN DONE TESTING
-  $('#si_email').val('myemail@gmail.com');
-  $('#si_password').val('my_pwd');
   /* Signup event listener */
   $('#signup_button').on('click', function () {
     const email = $('#email').val();
