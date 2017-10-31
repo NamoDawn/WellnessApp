@@ -1,14 +1,15 @@
 const $ = window.$;
 $(document).ready(function () {
-
+/******************* START TEST ***************************/
     function testFunction() {
 	$.ajax({
-	    url: '/experience',
+	    url: '/laughter',
 	    type: 'GET',
 	    contentType: 'text',
 	    success: function (res) {
 		console.log('yes');
-		$(location).attr('href', '/experience');
+//		window.location = '/stinky/';
+		$(location).attr('href', '/laughter');
 	    },
 	    error: function (res, error, xhr) {
 		console.log('no');
@@ -22,6 +23,11 @@ $(document).ready(function () {
   // REMOVE WHEN DONE TESTING
   $('#si_email').val('myemail@gmail.com');
   $('#si_password').val('my_pwd');
+
+/******************** END TEST *********************************/
+
+
+
   /* Signup event listener */
   $('#signup_button').on('click', function () {
     const email = $('#email').val();
@@ -34,8 +40,7 @@ $(document).ready(function () {
   $('#signin_button').on('click', function () {
     const email = $('#si_email').val();
     const password = $('#si_password').val()
-      loadExperiencePage();
-//    signin(email, password);
+    signin(email, password);
   });
   /* Tab toggle functionality */
   $('.tabs .tab').click(function (){
@@ -61,12 +66,12 @@ $(document).ready(function () {
   /* Flask call to  render experience.html */
   function loadExperiencePage () {
     $.ajax({
-
-      url: '/experience',
+      url: '/bless_those_gals_naomi_and_lisa',
+//      url: '/experience',
       type: 'GET',
       contentType: 'text',
       success: function (res) {
-        $(location).attr('href', '/experience');
+        $(location).attr('href', '/bless_those_gals_naomi_and_lisa');
       },
       error: function (res) {
         console.error('Failed to call endpoint \'experience\'');
@@ -90,7 +95,9 @@ $(document).ready(function () {
         if (res[1] === true) {
           saveData({'user_id': res[0]});
           setTimeout(loadExperiencePage(), 3000);
-          return true;
+	  setTimeout(function() {
+	      return true;
+	  }, 10000);
         }
         return false;
       },

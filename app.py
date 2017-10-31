@@ -152,7 +152,6 @@ def signin():
     Validates user credentials
     Reuturn: tuple of user_id and True if validated, False otherwise
     """
-#    input('----> :signin: route>')
     try:
         email = json.loads(request.data.decode('utf-8'))[0].get('email')
         password = json.loads(request.data.decode('utf-8'))[0].get('password')
@@ -163,7 +162,6 @@ def signin():
     except:
         validated = False
 
-#    input('user_id: {}\nvalidated: {}'.format(user_id, validated))
     return jsonify((user_id, validated))
 
 
