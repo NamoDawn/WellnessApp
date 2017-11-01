@@ -44,8 +44,7 @@ $(document).ready(function () {
       contentType: 'text',
       success: function (res) {
 //        $(location).attr('href', '/bless_those_gals_naomi_and_lisa');
-	  $(location).attr('href', '/experience');
-          
+        $(location).attr('href', '/experience');
       },
       error: function (res) {
         console.error('Failed to call endpoint \'experience\'');

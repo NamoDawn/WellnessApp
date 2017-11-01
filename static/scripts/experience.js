@@ -7,10 +7,9 @@ $(document).ready(function () {
 
   userId = JSON.parse(atob(localStorage.getItem('data')))['user_id'];
   /* launches data visualization */
-  $('#show_button').on('click', function() {
+  $('#show_button').on('click', function () {
     showVisualization(userId);
   });
-
 
   /* Positive Experience Button Clicked adds to build stagedObj */
   $('#positive-add').on('click', function () {
@@ -21,6 +20,7 @@ $(document).ready(function () {
     $('#positive').val('');
     $('#positive_scale').val('');
   });
+
   /* saves staged data to 'experiences' table */
   $('#stow_button').on('click', function () {
     saveExperiences(stagedObj);
@@ -28,6 +28,7 @@ $(document).ready(function () {
     stagedExp = [];
     stagedObj = [];
   });
+
   /* Negative Experience Button Clicked adds to build stagedObj */
   $('#negative-add').click(function () {
     let name = $('#negative').val();
@@ -37,6 +38,7 @@ $(document).ready(function () {
     $('#negative').val('');
     $('#negative_scale').val('');
   });
+
   /* 'Remove' icon clicked
    * deletes stagedObj that was clicked */
   $('body').on('click', '.remove-icon', function () {
@@ -51,6 +53,7 @@ $(document).ready(function () {
       }
     }
   });
+
   /* Adds the experience to the DOM as an icon/string in preparation for DB stow */
   function queueExp (name, scale, type) {
     if (scale === '') {
@@ -65,6 +68,7 @@ $(document).ready(function () {
       stagedObj.push({'exp_name': name, 'scale': scale, 'type': type, 'user_id': userId});
     }
   }
+
   /* Writes staged experiences to 'experiences' table */
   function saveExperiences (stagedObj) {
     $.ajax({
@@ -90,7 +94,7 @@ $(document).ready(function () {
       contentType: 'text/csv',
       data: JSON.stringify(userId),
       success: function (res) {
-	  $(location).attr('href', 'http://54.193.75.123/load_vis');
+        $(location).attr('href', 'http://54.193.75.123/load_vis');
       },
       error: function (error) {
         console.error('Error: ' + error);
