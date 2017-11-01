@@ -2,7 +2,7 @@
 import csv
 from datetime import datetime
 from flask_cors import CORS, cross_origin
-from flask import Flask, render_template, jsonify, request, send_from_directory
+from flask import Flask, render_template, jsonify, request, make_response
 import json
 import os
 from passlib.hash import sha256_crypt
@@ -29,9 +29,27 @@ def load_main_page():
     return render_template('login.html',
                            cache_id=uuid.uuid4())
 
-@app.route('/load/', strict_slashes=False)
-def load():
-    return render_template('index.html')
+
+@app.route('/load_vis/', strict_slashes=False)
+def load_vis():
+    return render_template('data_vis.html',
+                           cache_id=uuid.uuid4())
+
+
+@app.route('/load_vis/static/data', methods=['GET'], strict_slashes=False)
+def static_data():
+    """ reads csv file and formats for return to data visualizer  """
+    data = ""
+    with (open("static/data/everything.csv", newline="")) as f:
+        csv = f.read()
+
+    response = make_response(csv)
+    cd = 'attachment; filename=mycsv.csv'
+    response.headers['Content-Disposition'] = cd
+    response.mimetype = 'text/csv'
+
+    return response
+
 
 @app.route('/save_exp/', methods=['POST'],
            strict_slashes=False)
@@ -118,7 +136,7 @@ def vis():
 
     # set up diff file names depending on time window
     file_name = ""
-    with (open("templates/data/everything.csv", mode="w", newline="")) as f:
+    with (open("static/data/everything.csv", mode="w", newline="")) as f:
         writer = csv.writer(f)
         writer.writerow(["name", "count", "type", "scale"])
 
@@ -150,6 +168,7 @@ def fetch_data(user_id, prior_days):
 def stinky():
     return render_template('stinky.html')
 
+
 @app.route('/signup/', methods=['POST'], strict_slashes=False)
 def signup():
     """
@@ -164,7 +183,7 @@ def signup():
         return jsonify(True)
     con = connect_db()
     cursor = con.cursor()
-  
+
     cursor.execute("INSERT INTO credentials (email, password, f_name, l_name) \
     VALUES('{}', '{}', '{}', '{}')".format(email, password,
                                            obj[0].get('f_name'),
@@ -197,7 +216,8 @@ def load_experience_page():
     renders experience.html
     Return: rendered html
     """
-    return render_template('experience.html')
+    return render_template('experience.html',
+                           cache_id=uuid.uuid4())
 
 
 @app.route('/signin/', methods=['POST'], strict_slashes=False)

@@ -6,7 +6,6 @@ $(document).ready(function () {
   let userId;
 
   userId = JSON.parse(atob(localStorage.getItem('data')))['user_id'];
-  console.log('here---> ' + typeof(userId)); // <----- remove after testing
   /* launches data visualization */
   $('#show_button').on('click', function() {
     showVisualization(userId);
@@ -85,18 +84,16 @@ $(document).ready(function () {
   }
   /* Fetches experiences based on date rage and user id */
   function showVisualization (userId) {
-//    const obj = [{'userId': userId}]
     $.ajax({
       url: '/vis',
       type: 'POST',
-      contentType: 'application/json',
+      contentType: 'text/csv',
       data: JSON.stringify(userId),
       success: function (res) {
-        console.log('SUCCESS!!!');
-	  $(location).attr('href', 'http://54.193.75.123/load');
+	  $(location).attr('href', 'http://54.193.75.123/load_vis');
       },
-      error: function (res) {
-        console.error('Error: ' + res);
+      error: function (error) {
+        console.error('Error: ' + error);
       }
     });
   }
