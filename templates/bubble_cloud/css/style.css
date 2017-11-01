@@ -1,0 +1,100 @@
+
+body {
+}
+
+a, a:visited {
+  color:white;
+}
+
+a#negative.bubble-node {
+  fill: #f8f8f8;
+}
+
+a#negative.bubble-hover {
+  fill: white;
+}
+ 
+#container {
+  padding-top:20px;
+  width: 980px;
+  border-left: 2px #ddd solid;
+  border-right: 2px #ddd solid;
+}
+
+header {
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    padding: 10px;
+}
+
+#book-title {
+  font-family: 'Lato', sans-serif;
+  color: #555;
+  font-weight: 700;
+  font-size: 2.3em;
+  text-align: center;
+}
+
+#text-select {
+  float:right;
+  margin-right: 10px;
+}
+
+#vis {
+  overflow: hidden;
+  position: relative;
+}
+
+#status {
+  padding:0 0 20px 20px;
+}
+
+#controls {
+  padding: 20px;
+  background-color: #eee;
+  margin: 10px;
+  width: 350px;
+}
+
+#bubble-background {
+  fill: none;
+  pointer-events: all;
+}
+
+.bubble-node {
+  fill: #d2e3ed;
+}
+
+.bubble-hover {
+  fill: white;
+}
+
+a.bubble-label {
+  font-family:'Lato', sans-serif; 
+  cursor: pointer;
+  display: block;
+  color: inherit;
+  text-align: center;
+  text-decoration: none;
+  line-height: 1em;
+  position: absolute;
+}
+
+
+.bubble-label .bubble-label-value {
+  font: 12px sans-serif;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.bubble-label .bubble-label-scale {
+  font: 11px sans-serif;
+  white-space: nowrap;
+}
+
+footer p {
+  text-align: center;
+  padding-top:20px;
+  padding-bottom:20px;
+  font: 13px sans-serif;
+}

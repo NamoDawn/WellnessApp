@@ -2,7 +2,7 @@
 import csv
 from datetime import datetime
 from flask_cors import CORS, cross_origin
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, send_from_directory
 import json
 import os
 from passlib.hash import sha256_crypt
@@ -29,6 +29,9 @@ def load_main_page():
     return render_template('login.html',
                            cache_id=uuid.uuid4())
 
+@app.route('/load/', strict_slashes=False)
+def load():
+    return render_template('index.html')
 
 @app.route('/save_exp/', methods=['POST'],
            strict_slashes=False)
@@ -97,12 +100,14 @@ def save_exp():
     return jsonify(True)
 
 
-@app.route('/vis/<user_id> <prior_days>', strict_slashes=False)
-def show_vis(user_id, prior_days):
+@app.route('/vis/', methods=['POST', 'GET'], strict_slashes=False)
+def vis():
     """
     fetches user experience info and returns to front
     in csv format for use with data visualization
     """
+    user_id = request.data.decode('utf-8')
+    prior_days = 0
     experiences = fetch_data(user_id, prior_days)
     obj = []
     for exp in experiences:
@@ -113,7 +118,7 @@ def show_vis(user_id, prior_days):
 
     # set up diff file names depending on time window
     file_name = ""
-    with (open("vis.csv", mode="w", newline="")) as f:
+    with (open("templates/data/everything.csv", mode="w", newline="")) as f:
         writer = csv.writer(f)
         writer.writerow(["name", "count", "type", "scale"])
 
@@ -122,14 +127,8 @@ def show_vis(user_id, prior_days):
                              o["count"],
                              o["type"],
                              o["scale"]])
-    csv_data = ""
-    with (open("vis.csv", mode="r")) as f:
-        csv_data = f.read()
-    return jsonify(csv_data)
 
-
-def to_csv(data):
-    """ puts json data into csv format """
+    return jsonify(True)
 
 
 def fetch_data(user_id, prior_days):
@@ -146,6 +145,10 @@ def fetch_data(user_id, prior_days):
     con.close()
     return result
 
+
+@app.route('/stinky', strict_slashes=False)
+def stinky():
+    return render_template('stinky.html')
 
 @app.route('/signup/', methods=['POST'], strict_slashes=False)
 def signup():
