@@ -77,7 +77,7 @@ def save_exp():
         if scale == '':
             scale = 5
 
-        cursor.execute('SELECT `count`, `date`, `type` \
+        cursor.gexecute('SELECT `count`, `date`, `type` \
         FROM `experiences` \
         WHERE exp_name=\'{}\' AND date=\'{}\' \
         ORDER BY date DESC'.format(exp_name, date))
@@ -110,9 +110,11 @@ def save_exp():
 
         if is_dupe is False:
             cursor.execute(
-                'INSERT INTO experiences (exp_name, scale, date, type, user_id, count) \
-                VALUES("{}", "{}", "{}", "{}", "{}", "{}")'.format(
-                    exp_name, scale, date, exp_type, user_id, count))
+                'INSERT INTO experiences \
+                (exp_name, scale, date, type, user_id, count) \
+                VALUES("{}", "{}", "{}", \
+                "{}", "{}", "{}")'.format(exp_name, scale, date,
+                                          exp_type, user_id, count))
             con.commit()
     con.close()
     return jsonify(True)
@@ -125,43 +127,88 @@ def vis():
     in csv format for use with data visualization
     """
     user_id = request.data.decode('utf-8')
-    prior_days = 7  # TODO: this should come in with request.data
-    experiences = fetch_data(user_id, prior_days)
-    
+    generate_csv_files(user_id)
+    return jsonify(True)
+
+
+def generate_csv_files(user_id):
+    """
+    creates three csv file (7, 30 and life)
+    for use when laoding data visualization
+    """
+   # 7 days
+    experiences = fetch_data(user_id, 7)
     obj = []
     for exp in experiences:
         obj.append({'name': exp[0],
                     'count': exp[1],
                     'type': exp[2],
                     'scale': exp[3]})
-
-    # set up diff file names depending on time window
-    file_name = ""
-    with (open("static/data/everything.csv", mode="w", newline="")) as f:
+    with (open("static/data/week.csv", "w", newline="")) as f:
         writer = csv.writer(f)
         writer.writerow(["name", "count", "type", "scale"])
-
         for o in obj:
             writer.writerow([o["name"],
                              o["count"],
                              o["type"],
                              o["scale"]])
 
-    return jsonify(True)
+    # 30 days
+    experiences = fetch_data(user_id, 30)
+
+    obj = []
+    for exp in experiences:
+        obj.append({'name': exp[0],
+                    'count': exp[1],
+                    'type': exp[2],
+                    'scale': exp[3]})
+    with (open("static/data/month.csv", "w", newline="")) as f:
+        writer = csv.writer(f)
+        writer.writerow(["name", "count", "type", "scale"])
+        for o in obj:
+            writer.writerow([o["name"],
+                             o["count"],
+                             o["type"],
+                             o["scale"]])
+
+    # life-to-date
+    experiences = fetch_data(user_id)
+    obj = []
+    for exp in experiences:
+        obj.append({'name': exp[0],
+                    'count': exp[1],
+                    'type': exp[2],
+                    'scale': exp[3]})
+    with (open("static/data/everything.csv", "w", newline="")) as f:
+        writer = csv.writer(f)
+        writer.writerow(["name", "count", "type", "scale"])
+        for o in obj:
+            writer.writerow([o["name"],
+                             o["count"],
+                             o["type"],
+                             o["scale"]])
 
 
-def fetch_data(user_id, prior_days):
+def fetch_data(user_id, prior_days=None):
     """ fetches user specific data from 'experience' table  """
     con = connect_db()
     cur = con.cursor()
-    cur.execute("SELECT exp_name, count, type, scale \
-    FROM experiences \
-    WHERE user_id={} AND \
-    date BETWEEN DATE_SUB(\
-    NOW(), INTERVAL {} DAY) \
-    AND NOW() ORDER BY date DESC".format(user_id, prior_days))
-    result = cur.fetchall()
-    con.close()
+    if prior_days is not None:
+        cur.execute("SELECT exp_name, count, type, scale \
+        FROM experiences \
+        WHERE user_id={} AND \
+        date BETWEEN DATE_SUB(\
+        NOW(), INTERVAL {} DAY) \
+        AND NOW() ORDER BY date DESC".format(user_id, prior_days))
+        result = cur.fetchall()
+        con.close()
+    else:
+        cur.execute("SELECT exp_name, count, type, scale \
+        FROM experiences \
+        WHERE user_id={} \
+        ORDER BY date DESC".format(user_id))
+        result = cur.fetchall()
+        con.close()
     return result
 
 
