@@ -94,7 +94,7 @@ $(document).ready(function () {
       contentType: 'text/csv',
       data: JSON.stringify(userId),
       success: function (res) {
-        $(location).attr('href', 'http://54.193.75.123/load_vis');
+        $(location).attr('href', '/load_vis');
       },
       error: function (error) {
         console.error('Error: ' + error);
