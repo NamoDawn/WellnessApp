@@ -125,8 +125,9 @@ def vis():
     in csv format for use with data visualization
     """
     user_id = request.data.decode('utf-8')
-    prior_days = 0
+    prior_days = 7  # TODO: this should come in with request.data
     experiences = fetch_data(user_id, prior_days)
+    
     obj = []
     for exp in experiences:
         obj.append({'name': exp[0],
