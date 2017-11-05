@@ -11,7 +11,7 @@ Bubbles = () ->
   label = null
   margin = {top: 5, right: 0, bottom: 0, left: 0}
   # largest size for our bubbles
-  maxRadius = 65
+  maxRadius = 150
 
   # this scale will be used to size our bubbles
   rScale = d3.scale.sqrt().range([8,maxRadius])
@@ -239,7 +239,8 @@ Bubbles = () ->
     # - remember to add the 'px' at the end as we are dealing with 
     #  styling divs
     label
-      .style("font-size", (d) -> Math.max(8, rScale(rValue(d) / 2)) + "px")
+#      .style("font-size", 20 + "px")
+      .style("font-size", (d) -> Math.max(8, rScale(rValue(d) / 20)) + "px")
       .style("width", (d) -> 2.5 * rScale(rValue(d)) + "px")
 
     # interesting hack to get the 'true' text width
