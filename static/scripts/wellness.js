@@ -38,12 +38,10 @@ $(document).ready(function () {
   /* Flask call to  render experience.html */
   function loadExperiencePage () {
     $.ajax({
-//      url: '/bless_those_gals_naomi_and_lisa',
       url: '/experience',
       type: 'GET',
       contentType: 'text',
       success: function (res) {
-//        $(location).attr('href', '/bless_those_gals_naomi_and_lisa');
         $(location).attr('href', '/experience');
       },
       error: function (res) {
@@ -67,10 +65,7 @@ $(document).ready(function () {
       success: function (res) {
         if (res[1] === true) {
           saveData({'user_id': res[0]});
-          setTimeout(loadExperiencePage(), 3000);
-          setTimeout(function () {
-            return true;
-          }, 10000);
+          loadExperiencePage();
         }
         return false;
       },
