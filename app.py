@@ -77,7 +77,7 @@ def save_exp():
         if scale == '':
             scale = 5
 
-        cursor.gexecute('SELECT `count`, `date`, `type` \
+        cursor.execute('SELECT `count`, `date`, `type` \
         FROM `experiences` \
         WHERE exp_name=\'{}\' AND date=\'{}\' \
         ORDER BY date DESC'.format(exp_name, date))
