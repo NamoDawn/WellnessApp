@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# script to install necessary dependencies
+
+sudo apt-get update
+sudo apt-get install -y nginx
+sudo service nginx restart
+sudo apt-get install -y gunicorn
+sudo apt-get install -y python3.6
+sudo apt-get install -y python3-pip
+sudo apt-get install -y git
+sudo pip install -y PyMySQL
+sudo pip3 install -y flask
+sudo pip install -U -y flask-cors
+sudo apt-get install -y mysql-server
+cd /etc/nginx/sites-available
+sudo rm default
+wget https://gist.githubusercontent.com/NamoDawn/be33e53528e4cf3001f6e3b1f53ad3ef/raw/845f0cd3af78a5b7e2c11ddbc6c345a08deb9232/default
+sudo chmod 755 default
+cd ~
+cd ../etc/init/
+wget https://gist.githubusercontent.com/NamoDawn/0ce751fcdd44587d7e594128a1770450/raw/8647dcd2793d9cd891182406c18ae89c7fd89b53/wellness.conf
+sudo chmod 755 wellness.conf
+sudo service nginx restart
