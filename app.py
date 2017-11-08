@@ -2,7 +2,7 @@
 import csv
 from datetime import datetime
 from flask_cors import CORS, cross_origin
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, make_response
 import json
 import os
 from passlib.hash import sha256_crypt
@@ -28,6 +28,27 @@ def load_main_page():
     """
     return render_template('login.html',
                            cache_id=uuid.uuid4())
+
+
+@app.route('/load_vis/', strict_slashes=False)
+def load_vis():
+    return render_template('data_vis.html',
+                           cache_id=uuid.uuid4())
+
+
+@app.route('/load_vis/static/data', methods=['GET'], strict_slashes=False)
+def static_data():
+    """ reads csv file and formats for return to data visualizer  """
+    data = ""
+    with (open("static/data/everything.csv", newline="")) as f:
+        csv = f.read()
+
+    response = make_response(csv)
+    cd = 'attachment; filename=mycsv.csv'
+    response.headers['Content-Disposition'] = cd
+    response.mimetype = 'text/csv'
+
+    return response
 
 
 @app.route('/save_exp/', methods=['POST'],
@@ -56,7 +77,7 @@ def save_exp():
         if scale == '':
             scale = 5
 
-        cursor.execute('SELECT `count`, `date`, `type` \
+        cursor.gexecute('SELECT `count`, `date`, `type` \
         FROM `experiences` \
         WHERE exp_name=\'{}\' AND date=\'{}\' \
         ORDER BY date DESC'.format(exp_name, date))
@@ -89,62 +110,111 @@ def save_exp():
 
         if is_dupe is False:
             cursor.execute(
-                'INSERT INTO experiences (exp_name, scale, date, type, user_id, count) \
-                VALUES("{}", "{}", "{}", "{}", "{}", "{}")'.format(
-                    exp_name, scale, date, exp_type, user_id, count))
+                'INSERT INTO experiences \
+                (exp_name, scale, date, type, user_id, count) \
+                VALUES("{}", "{}", "{}", \
+                "{}", "{}", "{}")'.format(exp_name, scale, date,
+                                          exp_type, user_id, count))
             con.commit()
     con.close()
     return jsonify(True)
 
 
-@app.route('/vis/<user_id> <prior_days>', strict_slashes=False)
-def show_vis(user_id, prior_days):
+@app.route('/vis/', methods=['POST', 'GET'], strict_slashes=False)
+def vis():
     """
     fetches user experience info and returns to front
     in csv format for use with data visualization
     """
-    experiences = fetch_data(user_id, prior_days)
+    user_id = request.data.decode('utf-8')
+    generate_csv_files(user_id)
+    return jsonify(True)
+
+
+def generate_csv_files(user_id):
+    """
+    creates three csv file (7, 30 and life)
+    for use when laoding data visualization
+    """
+   # 7 days
+    experiences = fetch_data(user_id, 7)
     obj = []
     for exp in experiences:
         obj.append({'name': exp[0],
                     'count': exp[1],
                     'type': exp[2],
                     'scale': exp[3]})
-
-    # set up diff file names depending on time window
-    file_name = ""
-    with (open("vis.csv", mode="w", newline="")) as f:
+    with (open("static/data/week.csv", "w", newline="")) as f:
         writer = csv.writer(f)
         writer.writerow(["name", "count", "type", "scale"])
-
         for o in obj:
             writer.writerow([o["name"],
                              o["count"],
                              o["type"],
                              o["scale"]])
-    csv_data = ""
-    with (open("vis.csv", mode="r")) as f:
-        csv_data = f.read()
-    return jsonify(csv_data)
+
+    # 30 days
+    experiences = fetch_data(user_id, 30)
+
+    obj = []
+    for exp in experiences:
+        obj.append({'name': exp[0],
+                    'count': exp[1],
+                    'type': exp[2],
+                    'scale': exp[3]})
+    with (open("static/data/month.csv", "w", newline="")) as f:
+        writer = csv.writer(f)
+        writer.writerow(["name", "count", "type", "scale"])
+        for o in obj:
+            writer.writerow([o["name"],
+                             o["count"],
+                             o["type"],
+                             o["scale"]])
+
+    # life-to-date
+    experiences = fetch_data(user_id)
+    obj = []
+    for exp in experiences:
+        obj.append({'name': exp[0],
+                    'count': exp[1],
+                    'type': exp[2],
+                    'scale': exp[3]})
+    with (open("static/data/everything.csv", "w", newline="")) as f:
+        writer = csv.writer(f)
+        writer.writerow(["name", "count", "type", "scale"])
+        for o in obj:
+            writer.writerow([o["name"],
+                             o["count"],
+                             o["type"],
+                             o["scale"]])
 
 
-def to_csv(data):
-    """ puts json data into csv format """
-
-
-def fetch_data(user_id, prior_days):
+def fetch_data(user_id, prior_days=None):
     """ fetches user specific data from 'experience' table  """
     con = connect_db()
     cur = con.cursor()
-    cur.execute("SELECT exp_name, count, type, scale \
-    FROM experiences \
-    WHERE user_id={} AND \
-    date BETWEEN DATE_SUB(\
-    NOW(), INTERVAL {} DAY) \
-    AND NOW() ORDER BY date DESC".format(user_id, prior_days))
-    result = cur.fetchall()
-    con.close()
+    if prior_days is not None:
+        cur.execute("SELECT exp_name, count, type, scale \
+        FROM experiences \
+        WHERE user_id={} AND \
+        date BETWEEN DATE_SUB(\
+        NOW(), INTERVAL {} DAY) \
+        AND NOW() ORDER BY date DESC".format(user_id, prior_days))
+        result = cur.fetchall()
+        con.close()
+    else:
+        cur.execute("SELECT exp_name, count, type, scale \
+        FROM experiences \
+        WHERE user_id={} \
+        ORDER BY date DESC".format(user_id))
+        result = cur.fetchall()
+        con.close()
     return result
+
+
+@app.route('/stinky', strict_slashes=False)
+def stinky():
+    return render_template('stinky.html')
 
 
 @app.route('/signup/', methods=['POST'], strict_slashes=False)
@@ -161,7 +231,7 @@ def signup():
         return jsonify(True)
     con = connect_db()
     cursor = con.cursor()
-  
+
     cursor.execute("INSERT INTO credentials (email, password, f_name, l_name) \
     VALUES('{}', '{}', '{}', '{}')".format(email, password,
                                            obj[0].get('f_name'),
@@ -194,7 +264,8 @@ def load_experience_page():
     renders experience.html
     Return: rendered html
     """
-    return render_template('experience.html')
+    return render_template('experience.html',
+                           cache_id=uuid.uuid4())
 
 
 @app.route('/signin/', methods=['POST'], strict_slashes=False)

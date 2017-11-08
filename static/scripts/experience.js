@@ -6,6 +6,11 @@ $(document).ready(function () {
   let userId;
 
   userId = JSON.parse(atob(localStorage.getItem('data')))['user_id'];
+  /* launches data visualization */
+  $('#show_button').on('click', function () {
+    showVisualization(userId);
+  });
+
   /* Positive Experience Button Clicked adds to build stagedObj */
   $('#positive-add').on('click', function () {
     const name = $('#positive').val();
@@ -15,6 +20,7 @@ $(document).ready(function () {
     $('#positive').val('');
     $('#positive_scale').val('');
   });
+
   /* saves staged data to 'experiences' table */
   $('#stow_button').on('click', function () {
     saveExperiences(stagedObj);
@@ -22,6 +28,7 @@ $(document).ready(function () {
     stagedExp = [];
     stagedObj = [];
   });
+
   /* Negative Experience Button Clicked adds to build stagedObj */
   $('#negative-add').click(function () {
     let name = $('#negative').val();
@@ -31,6 +38,7 @@ $(document).ready(function () {
     $('#negative').val('');
     $('#negative_scale').val('');
   });
+
   /* 'Remove' icon clicked
    * deletes stagedObj that was clicked */
   $('body').on('click', '.remove-icon', function () {
@@ -45,6 +53,7 @@ $(document).ready(function () {
       }
     }
   });
+
   /* Adds the experience to the DOM as an icon/string in preparation for DB stow */
   function queueExp (name, scale, type) {
     if (scale === '') {
@@ -59,6 +68,7 @@ $(document).ready(function () {
       stagedObj.push({'exp_name': name, 'scale': scale, 'type': type, 'user_id': userId});
     }
   }
+
   /* Writes staged experiences to 'experiences' table */
   function saveExperiences (stagedObj) {
     $.ajax({
@@ -77,16 +87,17 @@ $(document).ready(function () {
     });
   }
   /* Fetches experiences based on date rage and user id */
-  function fetchExperiences (userId, priorDays) {
+  function showVisualization (userId) {
     $.ajax({
-      url: '/vis/' + userId + ' ' + priorDays,
-      type: 'GET',
-      contentType: 'application/json',
+      url: '/vis',
+      type: 'POST',
+      contentType: 'text/csv',
+      data: JSON.stringify(userId),
       success: function (res) {
-        return (res);
+        $(location).attr('href', '/load_vis');
       },
-      error: function (res, error, xhr) {
-        console.error('FAILURE: ' + error);
+      error: function (error) {
+        console.error('Error: ' + error);
       }
     });
   }

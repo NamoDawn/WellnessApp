@@ -38,12 +38,13 @@ $(document).ready(function () {
   /* Flask call to  render experience.html */
   function loadExperiencePage () {
     $.ajax({
-      url: '/bless_those_gals_naomi_and_lisa',
-//      url: '/experience',
+//      url: '/bless_those_gals_naomi_and_lisa',
+      url: '/experience',
       type: 'GET',
       contentType: 'text',
       success: function (res) {
-        $(location).attr('href', '/bless_those_gals_naomi_and_lisa');
+//        $(location).attr('href', '/bless_those_gals_naomi_and_lisa');
+        $(location).attr('href', '/experience');
       },
       error: function (res) {
         console.error('Failed to call endpoint \'experience\'');
