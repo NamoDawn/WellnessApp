@@ -77,7 +77,7 @@ def save_exp():
         if scale == '':
             scale = 5
 
-        cursor.gexecute('SELECT `count`, `date`, `type` \
+        cursor.execute('SELECT `count`, `date`, `type` \
         FROM `experiences` \
         WHERE exp_name=\'{}\' AND date=\'{}\' \
         ORDER BY date DESC'.format(exp_name, date))
@@ -274,8 +274,10 @@ def signin():
     Validates user credentials
     Reuturn: tuple of user_id and True if validated, False otherwise
     """
+
     try:
-        email = json.loads(request.data.decode('utf-8'))[0].get('email')
+        r = request.data.decode('utf-8')
+        email = json.loads(r)[0].get("email")
         password = json.loads(request.data.decode('utf-8'))[0].get('password')
         db_creds = fetch_credentials(email)
         db_password = db_creds[2]
