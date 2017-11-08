@@ -1,11 +1,11 @@
-# Wellness
+# Stow
 This project contains functions for autoscaling and auto deployment through the AWS CLI
 ## Getting Started
 
 ## Requirements
 ### Ubuntu Machine
 You can use last version of Ubuntu or any other OS 
-(Note: unit test done on Ubuntu 14.04 ubuntu/images/hvm-ssd/ubuntu-trusty-14.04-amd64-server-20170727 (ami-841f46ff), available through AWS).
+(Note: unit test done on Ubuntu 14.04).
 
 ## Requirements for the Wellness App
 The following are the primary dependencies for running the Wellness app
@@ -18,41 +18,45 @@ $ sudo dpkg -i mysql-apt-*.deb
 $ sudo apt-get update
 $ sudo apt-get install mysql-server
 ```
+### Nginx
 
+```
+~$ sudo apt-get install nginx
+```
 
 ### Pip3
 ```
-sudo apt-get install python3-pip
+~$ sudo apt-get install python3-pip
 ```
 
 ### passlib (1.7.1)
 ```
-pip3 install passlib
+~$ pip3 install passlib
 ```
 
 ### Flask-Cors (3.0.3)
 ```
-pip3 install flask_cors
+~$ pip3 install flask_cors
 ```
 
 ### PyMySQL (0.7.11)
 ```
-pip3 install pymysql
+~$ pip3 install pymysql
 ```
 
 ### gunicorn (19.7.1) 
 ```
-pip3 install gunicorn
+~$ pip3 install gunicorn
 ```
 
 ## Requirements for the AWS Scaling and Deployment
 ### Pip3
 ```
-sudo apt-get install python3-pip
+~$ sudo apt-get install python3-pip
 ```
 ### AWS CLI
 ```
-pip3 install awscli
+~$ pip3 install awscli
 ```
 
 #### Configure AWS
