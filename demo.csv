@@ -1,0 +1,28 @@
+name,count,type,scale
+headache,50,negative,8.0
+meditate,28,positive,6.5
+hydrate,30,positive,9.0
+numbness,80,negative,8.5
+fever,45,negative,6.0
+insomnia,15,negative,9.0
+stretch,40,positive,5.5
+lifting,25,positive,8.0
+nausea,60,negative,7.5
+neck pain,100,negative,6.0
+hives,40,negative,5.0
+walks,30,positive,10.0
+fatigue,120,negative,10.0
+vision,100,negative,6.0
+no dairy,30,positive,7.0
+no allergens,90,positive,8.0
+medicine,30,positive,5.0
+acupuncture,20,positive,9.0
+mindfulness,20,positive,8.0
+leg nerves,95,negative,7.0
+hip pain,120,negative,6.5
+shoulder pain,110,negative,7.0
+nodules,35,negative,9.0
+hand arthritis,120,negative,8.5
+knee pain,120,negative,9.5
+numb tongue,20,negative,4.5
+mood,30,positive,9.0
