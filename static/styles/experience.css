@@ -161,8 +161,7 @@ body .container .content input.inpt:focus {
 body .container .content input.submit {
   font-size: 12px;
   line-height: 42px;
-  display: block;
-  width: 100%;
+  width: 49%;
   height: 42px;
   cursor: pointer;
   vertical-align: middle;
