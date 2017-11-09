@@ -1,0 +1,1 @@
+This folder contains .csv files for use with data visualization script
