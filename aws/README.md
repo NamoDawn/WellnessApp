@@ -46,7 +46,8 @@ There are Fabric files that condenses all aws calls for automatic scaling and de
 |**bash_scripts/get_metrics.sh**|     Stand alone aws script for getting an EC2 instance's metrics  |
 |**bash_scripts/write_instances.sh**|    This script gets instanceid and instance public ip address and writes it to instance_id.txt and instance_ip.txt, respectively   |
 
-## Create New Instance
+## Testing
+### Create New Instance
 ```
 fab -f autoscale.py autoscale
 ```
