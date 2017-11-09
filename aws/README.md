@@ -56,4 +56,5 @@ fab -f autoscale.py autoscale
 * [Boto3](https://boto3.readthedocs.io/en/latest/reference/services/autoscaling.html)
 
 ## Author(s)
-* Lisa Leung 
+* Lisa Leung
+* Naomi Sorrell
