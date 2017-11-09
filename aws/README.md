@@ -10,7 +10,7 @@ You can use last version of Ubuntu or any other OS
 ### Pip
 Install Pip 
 ```
-sudo apt-get install python-pip python-dev
+sudo apt-get install python3-pip
 ```
 
 ### Fabric
@@ -20,7 +20,7 @@ sudo apt-get install fabric
 
 ### AWS CLI
 ```
-pip install awscli --upgrade --user
+pip3 install awscli
 ```
 
 #### Configure AWS
