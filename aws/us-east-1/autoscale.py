@@ -31,31 +31,39 @@ def get_metrics(instance_id):
     except:
         return None
 
-def create_instance(image_id, instance_type, security_group, key, subnet, instance_key, instance_value):
+def create_instance(image_id, instance_type, security_group, key, subnet, count=1):
     """ Created a new instance based on the required parameters passed in: see AWS Documentation for more info"""
     try:
-        instance = local("aws ec2 run-instances --image-id {} --count 1 \
+        instance = local("aws ec2 run-instances --image-id {} --count {} \
         --instance-type {} --security-group-ids {} \
         --key-name {} --monitoring Enabled=true \
-        --subnet-id {}".format(image_id, instance_type, security_group, key, subnet), capture=True)
-        """ For us-east-1"""
-        """ add tag for instance"""
-        new_instance_id = json.loads(instance).get("Instances")[0]['InstanceId']
-        local("sudo aws ec2 create-tags --resources {} --tags \
-        Key={},Value={}".format(new_instance_id, instance_key, instance_value))
+        --subnet-id {}".format(image_id, count, instance_type, security_group, key, subnet), capture=True)
 
-        new_instance_info = local("sudo aws ec2 describe-instances \
-        --instance-ids {}".format(new_instance_id), capture=True)
-        new_instance_ip = json.loads(new_instance_info).get("Reservations")[0].get("Instances")[0].get("PublicIpAddress")
 
         """ PENDING: deploy code here """
 
-        """ Update HAProxy"""
-        append_ip_to_haproxy(new_instance_ip)
-        local("sudo service haproxy reload")
+        return instance
     except:
         return None
 
+def get_instance_id(instance):
+    """ Retrieve an instance's ID with instance_info passed in"""
+    return json.loads(instance).get("Instances")[0]['InstanceId']
+
+def get_instance_info(instance_id):
+    """ Retrieve all the information associated with an instance"""
+    instance_info = local("sudo aws ec2 describe-instances \
+    --instance-ids {}".format(instance_id), capture=True)
+    return instance_info 
+
+def get_instance_ip(instance_info):
+    """ Retrieve an instance's IP with instance_info passed in"""
+    return json.loads(instance_info).get("Reservations")[0].get("Instances")[0].get("PublicIpAddress")
+
+def tag_instance(instance_id, key, val):
+    """ Tag instance with a key/value pair by instance id"""
+    local("sudo aws ec2 create-tags --resources {} --tags \
+    Key={},Value={}".format(instance_id, key, val))    
 
 def append_ip_to_haproxy(instance_ip):
     """ Appends a new ip address to the HAproxy config file"""
@@ -89,6 +97,8 @@ def get_cluster_instanceID(cluster_key, cluster_value):
             append_ip_to_haproxy(instance_ip)
     local("sudo service haproxy reload")
 
+
+
 def add_instance_to_target(target, cluster_key, cluster_value):
     """ add instance"""
     instance_list = []
@@ -108,3 +118,11 @@ def add_instance_to_target(target, cluster_key, cluster_value):
 
 def autoscale():
     """ run methods here"""
+    new_instance = create_instance("ami-7dce6507", "t2.micro", "sg-56949f24", "virginia-personal","subnet-af38da80", 1)
+    new_instance_id = get_instance_id(new_instance)
+    tag_instance(new_instance_id, "instance-group", "wellness")
+    new_instance_info = get_instance_info(new_instance_id)
+    new_instance_ip = get_instance_ip(new_instance_info)
+
+def add_all_instances_to_target():
+    add_instance_to_target("arn:aws:elasticloadbalancing:us-east-1:137086037822:targetgroup/wellness-target-group/9c8e0b13a636e49d", "instance-group", "wellness")
