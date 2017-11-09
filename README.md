@@ -71,7 +71,13 @@ Default output format [json]: json
 
 * More information available in the aws directory
 
+### Setup
 
+#### Setting up MySQL
+```
+~$ mysql -h<hostname> -u<user> wellness_dev_db < setup_scripts/wellness_db_setup.sql
+~$ mysql -h<hostname> -u<user> wellness_dev_db < setup_scripts/wellness_table_setup.sql
+```
 
 ## Author(s)
 * Naomi Sorrell
