@@ -1,6 +1,6 @@
 const $ = window.$;
 
-const store = localStorage.getItem('data')
+const store = localStorage.getItem('data');
 if (store === null) {
   $(location).attr('href', '/');
 }
@@ -11,10 +11,9 @@ $(document).ready(function () {
   let userId;
 
   if (store === null) {
-    return
+    return;
   }
-  userId = JSON.parse(atob(localStorage.getItem('data')))['user_id'];
-  console.log('userid: ' + userId); debugger;
+  userId = JSON.parse(atob(store))['user_id'];
   /* launches data visualization */
   $('#show_button').on('click', function () {
     showVisualization(userId);
