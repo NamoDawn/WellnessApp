@@ -50,7 +50,7 @@ fab -f autoscale.py autoscale
 ```
 ## Deploying to AWS Instances
 ```
-fab -i <rprivate-key-for-instance> -f autodeploy.py deploy -u ubuntu
+fab -i <private-key-for-instance> -f autodeploy.py deploy -u ubuntu
 ```
 
 ## Resource(s)
