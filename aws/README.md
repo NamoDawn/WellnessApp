@@ -48,6 +48,10 @@ There are Fabric files that condenses all aws calls for automatic scaling and de
 ```
 fab -f autoscale.py autoscale
 ```
+## Deploying to AWS Instances
+```
+fab -i <rprivate-key-for-instance> -f autodeploy.py deploy -u ubuntu
+```
 
 ## Resource(s)
 * [Getting started with AWS CLI](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html)
