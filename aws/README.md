@@ -11,6 +11,12 @@ You can use last version of Ubuntu or any other OS
 ```
 ~$ sudo apt-get install python3-pip
 ```
+### Fabric
+```
+sudo apt-get install fabric
+```
+
+>>>>>>> aws
 ### AWS CLI
 ```
 ~$ pip3 install awscli
