@@ -7,15 +7,18 @@ This project contains functions for autoscaling and auto deployment through the 
 You can use last version of Ubuntu or any other OS 
 (Note: unit test done on Ubuntu 14.04 ubuntu/images/hvm-ssd/ubuntu-trusty-14.04-amd64-server-20170727 (ami-841f46ff), available through AWS).
 
-### Pip
-Install Pip 
+### Pip3
 ```
-sudo apt-get install python-pip python-dev
+~$ sudo apt-get install python3-pip
 ```
-
 ### AWS CLI
 ```
-pip install awscli --upgrade --user
+~$ pip3 install awscli
+```
+
+### Fabric
+```
+~$ sudo apt-get install -y fabric
 ```
 
 #### Configure AWS
@@ -41,6 +44,10 @@ There are Fabric files that condenses all aws calls for automatic scaling and de
 |**bash_scripts/get_metrics.sh**|     Stand alone aws script for getting an EC2 instance's metrics  |
 |**bash_scripts/write_instances.sh**|    This script gets instanceid and instance public ip address and writes it to instance_id.txt and instance_ip.txt, respectively   |
 
+## Creating New AWS Instances
+```
+fab -f autoscale.py autoscale
+```
 
 ## Resource(s)
 * [Getting started with AWS CLI](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html)
