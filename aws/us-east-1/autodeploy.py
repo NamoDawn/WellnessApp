@@ -22,8 +22,8 @@ def install_dependencies():
     run("sudo apt-get install -y git")
 
 def add_project():
+    """ retrieving the project from github to /home/ubuntu"""
     run("sudo git -C /home/ubuntu clone https://github.com/NamoDawn/WellnessApp.git")
-
 
 def setup_nginx():
     """ setting up nginx"""
@@ -38,6 +38,7 @@ def setup_upstart():
     run("sudo chmod 755 /etc/init/wellness.conf")
 
 def create_csv():
+    """ empty csv files are needed for the bubble display"""
     run("sudo touch /home/ubuntu/WellnessApp/static/data/everything.csv")
     run("sudo chmod 777 /home/ubuntu/WellnessApp/static/data/everything.csv")
     run("sudo touch /home/ubuntu/WellnessApp/static/data/week.csv")
