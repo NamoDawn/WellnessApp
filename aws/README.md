@@ -13,6 +13,11 @@ Install Pip
 sudo apt-get install python-pip python-dev
 ```
 
+### Fabric
+```
+sudo apt-get install fabric
+```
+
 ### AWS CLI
 ```
 pip install awscli --upgrade --user
