@@ -1,11 +1,20 @@
 const $ = window.$;
 
+const store = localStorage.getItem('data')
+if (store === null) {
+  $(location).attr('href', '/');
+}
+
 $(document).ready(function () {
   let stagedExp = [];
   let stagedObj = [];
   let userId;
 
+  if (store === null) {
+    return
+  }
   userId = JSON.parse(atob(localStorage.getItem('data')))['user_id'];
+  console.log('userid: ' + userId); debugger;
   /* launches data visualization */
   $('#show_button').on('click', function () {
     showVisualization(userId);
