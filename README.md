@@ -69,7 +69,7 @@ Default region name: us-east-1
 Default output format [json]: json
 ```
 
-* More information available in the aws directory
+* More information available in the scaledeploy directory
 
 
 
