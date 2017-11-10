@@ -80,6 +80,3 @@ fab -i <private-key-for-instance> -f autodeploy.py deploy -u ubuntu -H <hosts>
 * [Using Amazon EC2 instances](http://docs.aws.amazon.com/cli/latest/userguide/cli-ec2-launch.html)
 * [Boto3](https://boto3.readthedocs.io/en/latest/reference/services/autoscaling.html)
 
-## Author(s)
-* Lisa Leung
-* Naomi Sorrell
