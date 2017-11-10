@@ -45,10 +45,12 @@ There are Fabric files that condenses all aws calls for automatic scaling and de
 |**bash_scripts/write_instances.sh**|    This script gets instanceid and instance public ip address and writes it to instance_id.txt and instance_ip.txt, respectively   |
 
 ## Creating New AWS Instances
+A new aws instance is created, when the IP address is created it will automatically deploy the code.
 ```
 fab -f autoscale.py autoscale
 ```
 ## Deploying to AWS Instances
+You can also manually set the host IP address to deploy the code
 ```
 fab -i <private-key-for-instance> -f autodeploy.py deploy -u ubuntu -H <hosts>
 ```
