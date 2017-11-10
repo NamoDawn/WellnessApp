@@ -5,11 +5,10 @@ full deployment
 import os
 import time
 from fabric.api import local, run, hosts, env, put, cd
-
-env.hosts = ['34.226.154.101']
+import sys
 
 def install_dependencies():
-    """ installing all the dependencies necessary for wellness app"""
+    """ installing all the dependencies necessary for the stow app"""
     run("sudo apt-get update")
     run("sudo apt-get install -y nginx")
     run("sudo apt-get install -y python3-pip")
@@ -47,6 +46,7 @@ def create_csv():
     run("sudo chmod 777 /home/ubuntu/WellnessApp/static/data/month.csv")
 
 def deploy():
+    """ deploy"""
     install_dependencies()
     add_project()
     setup_upstart()

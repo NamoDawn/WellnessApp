@@ -2,7 +2,8 @@
 """
     Fabric script that automatically scale AWS instances
 """
-from fabric.api import local, sudo
+from fabric.api import local, sudo, env, run
+import autodeploy
 import datetime
 import json
 import time
@@ -69,7 +70,6 @@ def append_ip_to_haproxy(instance_ip):
     """ Appends a new ip address to the HAproxy config file"""
     local("echo '\tserver instance' {}':80 check' | sudo tee -a /etc/haproxy/haproxy.cfg".format(instance_ip))
 
-
 def get_cluster_instanceID(cluster_key, cluster_value):
     """ Gets all the instances in a cluster"""
     instance_list = []
@@ -97,14 +97,12 @@ def get_cluster_instanceID(cluster_key, cluster_value):
             append_ip_to_haproxy(instance_ip)
     local("sudo service haproxy reload")
 
-
-
 def add_instance_to_target(target, cluster_key, cluster_value):
     """ add instance"""
     instance_list = []
     try:
         cluster_instances = local("aws ec2 describe-instances --filters \
-        'Name=tag:{},Values={}'".format(cluster_key, cluster_value), capture=True)
+        'Name=tag:{},Values={}' 'Name=instance-state-code, Values=16'".format(cluster_key, cluster_value), capture=True)
     except:
         return None
     result = json.loads(cluster_instances).get('Reservations')
@@ -115,14 +113,17 @@ def add_instance_to_target(target, cluster_key, cluster_value):
                 --targets Id={}".format(target, instance_id))
             except:
                 continue
+def add_all_instances_to_target(targetgroup, groupkey, groupval):
+    """ add instance to a target group which is associated with an aws alb for load balancing"""
+    add_instance_to_target(targetgroup, groupkey, groupval)
 
-def autoscale():
+def scale():
     """ run methods here"""
-    new_instance = create_instance("ami-7dce6507", "t2.micro", "sg-56949f24", "virginia-personal","subnet-af38da80", 1)
+    new_instance = create_instance("image", "instance-type", "security-group", "key to access instance","subnet", 1)
     new_instance_id = get_instance_id(new_instance)
     tag_instance(new_instance_id, "instance-group", "wellness")
     new_instance_info = get_instance_info(new_instance_id)
     new_instance_ip = get_instance_ip(new_instance_info)
-
-def add_all_instances_to_target():
-    add_instance_to_target("arn:aws:elasticloadbalancing:us-east-1:137086037822:targetgroup/wellness-target-group/9c8e0b13a636e49d", "instance-group", "wellness")
+    time.sleep(20)
+    local("fab -i <key> -f autodeploy.py deploy -u ubuntu -H {}".format(new_instance_ip))
+    add_all_instances_to_target("<arn>", "instance-group", "wellness")
