@@ -72,6 +72,17 @@ Default output format [json]: json
 
 * More information available in the scaledeploy directory
 
+## Screenshots
+### Login Page
+
+<img src="https://i.imgur.com/3y8JJZe.png" alt="alt text" width="500">
+
+
+### Experience Page
+<img src="https://i.imgur.com/81y4N3v.png" alt="alt text" width="500">
+
+### Bubble Chart
+<img src="https://i.imgur.com/HU398a4.png" alt="alt text" width="500">
 
 
 ## Author(s)
