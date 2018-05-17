@@ -8,11 +8,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/login.css')}}?{{ cache_id }}"></link>
 
   </head>
-  <button id="test">Test</button>
   <!-- Container Section-->
   <section class="container">
     <article class="half">
-      <h1>Wellness</h1>
+      <h1>Stow</h1>
 
       <!-- Signup/ Signin Tabs-->
       <div class="tabs">
@@ -55,4 +54,13 @@
     <div class="half bg"></div>
   </section>
   <!-- End Section-->
+  <!-- Modal -->
+  <div id="signupModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p id="signup_notification"></p>
+  </div>
+  </div>
 </html>

@@ -11,7 +11,7 @@ Bubbles = () ->
   label = null
   margin = {top: 5, right: 0, bottom: 0, left: 0}
   # largest size for our bubbles
-  maxRadius = 150
+  maxRadius = 100
 
   # this scale will be used to size our bubbles
   rScale = d3.scale.sqrt().range([8,maxRadius])
